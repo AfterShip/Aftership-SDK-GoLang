@@ -2,12 +2,12 @@ package impl
 
 import (
 	"fmt"
-	"github.com/jarcoal/httpmock"
-	"github.com/stretchr/testify/assert"
-	"github.com/vimukthi-git/aftership-go/apiV4"
 	"net/http"
 	"testing"
-	//"time"
+
+	"github.com/AfterShip/aftership-sdk-go/apiV4"
+	"github.com/jarcoal/httpmock"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMain(m *testing.M) {
@@ -62,8 +62,8 @@ func TestGetAllCouriers(t *testing.T) {
 		apiV4.ResponseMeta{429, "", ""},
 		apiV4.CourierResponseData{exp},
 	}, map[string]string{
-		"X-RateLimit-Reset":"1458463600",
-		"X-RateLimit-Limit": "",
+		"X-RateLimit-Reset":     "1458463600",
+		"X-RateLimit-Limit":     "",
 		"X-RateLimit-Remaining": "",
 	})
 
@@ -433,21 +433,18 @@ func rateLimitCheck() {
 		nil,
 	}
 
-
 	c := make(chan apiV4.AfterShipApiError)
 	for i := 0; i < 100; i++ {
 
 		go func() {
 			//var meta apiV4.AfterShipApiError
 			for i := 0; i < 10000; i++ {
-				_, meta := api.GetCouriers();
+				_, meta := api.GetCouriers()
 				c <- meta
 				// fmt.Println(res)
 			}
 
-
 		}()
-
 
 	}
 	for {
@@ -455,7 +452,6 @@ func rateLimitCheck() {
 		<-c
 
 	}
-
 
 	//
 	//	p = apiV4.GetTrackingsParams{

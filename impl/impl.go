@@ -1,17 +1,18 @@
 package impl
 
 import (
-	"github.com/vimukthi-git/aftership-go/apiV4"
 	"net/http"
-	//"fmt"
+
 	"bytes"
 	"encoding/json"
-	"github.com/google/go-querystring/query"
+	"fmt"
 	"io/ioutil"
 	"log"
-	"fmt"
-	"time"
 	"strconv"
+	"time"
+
+	"github.com/AfterShip/aftership-sdk-go/apiV4"
+	"github.com/google/go-querystring/query"
 )
 
 type AfterShipApiV4Impl struct {
@@ -289,9 +290,9 @@ func (api *AfterShipApiV4Impl) request(method string, endpoint string,
 	code := result.ResponseCode().Code
 
 	// handling rate limit error by sleeping and retrying after reset
-	if code == 429 && api.RetryPolicy.RetryOnHittingRateLimit {
+	if code == 429 && api.RetryPolicy != nil && api.RetryPolicy.RetryOnHittingRateLimit {
 		timeNow := time.Now().Unix()
-		dur := time.Duration(int64(rateLimitReset) - timeNow) * time.Second
+		dur := time.Duration(int64(rateLimitReset)-timeNow) * time.Second
 		log.Println("Hit rate limit, Auto retry after Dur : ", dur)
 		c := time.After(dur)
 		for {
@@ -300,9 +301,6 @@ func (api *AfterShipApiV4Impl) request(method string, endpoint string,
 		}
 	}
 
-	if code != 200 && code != 201 {
-		// log.Print(result.ResponseCode())
-	}
 	return apiV4.AfterShipApiError{
 		result.ResponseCode(),
 	}
