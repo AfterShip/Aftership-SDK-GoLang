@@ -59,7 +59,7 @@ func TestGetAllCouriers(t *testing.T) {
 		},
 	}
 	mockhttp("GET", "https://api.aftership.com/v4/couriers/all", apiV4.CourierEnvelope{
-		apiV4.ResponseMeta{429, "", ""},
+		apiV4.ResponseMeta{200, "", ""},
 		apiV4.CourierResponseData{exp},
 	}, map[string]string{
 		"X-RateLimit-Reset":"1458463600",
