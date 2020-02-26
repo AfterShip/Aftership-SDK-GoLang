@@ -9,7 +9,7 @@ Aftership-SDK-GoLang
 
 Contact: <support@aftership.com>
 
-You will need to create an account at [Aftership](https://aftership.com) and obtain an API key first to access Aftership APIs using aftership-go SDK.
+You will need to create an account at [Aftership](https://aftership.com) and obtain an API key first to access Aftership APIs using aftership-go SDK..
 
 ### Installation
 If you already have go installed locally then do,
