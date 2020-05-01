@@ -1,16 +1,16 @@
-package main
+package example
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/aftership/aftership-sdk-go/v2"
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/notification"
-	"github.com/aftership/aftership-sdk-go/v2/tracking"
 )
 
-func main() {
-	aftership, err := aftership.NewAfterShip(&conf.AfterShipConf{
+func TestNotificationExample(t *testing.T) {
+	aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
 
@@ -20,7 +20,7 @@ func main() {
 	}
 
 	// Get the notification
-	param := tracking.SingleTrackingParam{
+	param := common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}

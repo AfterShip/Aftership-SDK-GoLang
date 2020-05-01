@@ -2,7 +2,7 @@ package aftership
 
 import (
 	"github.com/aftership/aftership-sdk-go/v2/checkpoint"
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/courier"
 	"github.com/aftership/aftership-sdk-go/v2/error"
 	"github.com/aftership/aftership-sdk-go/v2/notification"
@@ -13,7 +13,7 @@ import (
 
 // AfterShip is the client for all AfterShip API calls
 type AfterShip struct {
-	Config         *conf.AfterShipConf   // The config of AfterShip SDK
+	Config         *common.AfterShipConf // The config of AfterShip SDK
 	Courier        courier.Endpoint      // The endpoint to get a list of supported couriers.
 	Tracking       tracking.Endpoint     // The endpoint to create trackings, update trackings, and get tracking results.
 	LastCheckpoint checkpoint.Endpoint   // The endpoint to get tracking information of the last checkpoint of a tracking.
@@ -22,7 +22,7 @@ type AfterShip struct {
 }
 
 // NewAfterShip returns the AfterShip client
-func NewAfterShip(cfg *conf.AfterShipConf) (*AfterShip, *error.AfterShipError) {
+func NewAfterShip(cfg *common.AfterShipConf) (*AfterShip, *error.AfterShipError) {
 	if cfg == nil {
 		return nil, error.MakeSdkError(error.ErrorTypeConstructorError, "ConstructorError: config is nil", "")
 	}

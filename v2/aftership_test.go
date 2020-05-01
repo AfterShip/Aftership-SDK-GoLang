@@ -3,7 +3,7 @@ package aftership
 import (
 	"testing"
 
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +20,7 @@ func TestNilConfig(t *testing.T) {
 
 func TestInvalidAPIKey(t *testing.T) {
 	// API Key is not specified
-	_, err := NewAfterShip(&conf.AfterShipConf{})
+	_, err := NewAfterShip(&common.AfterShipConf{})
 	assert.NotNil(t, err)
 
 	expectedMsg := "ConstructorError: Invalid API key"
@@ -31,7 +31,7 @@ func TestInvalidAPIKey(t *testing.T) {
 
 func TestDefaultConfig(t *testing.T) {
 	// API Key is specified
-	client, err := NewAfterShip(&conf.AfterShipConf{
+	client, err := NewAfterShip(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
 
@@ -46,7 +46,7 @@ func TestSpecificedConfig(t *testing.T) {
 	endpoint := "YOUR_ENDPOINT"
 	agent := "YOUR_AGENT"
 
-	client, err := NewAfterShip(&conf.AfterShipConf{
+	client, err := NewAfterShip(&common.AfterShipConf{
 		APIKey:           apiKey,
 		Endpoint:         endpoint,
 		UserAagentPrefix: agent,

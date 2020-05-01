@@ -1,15 +1,15 @@
-package main
+package example
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/aftership/aftership-sdk-go/v2"
-	"github.com/aftership/aftership-sdk-go/v2/checkpoint"
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 )
 
-func main() {
-	aftership, err := aftership.NewAfterShip(&conf.AfterShipConf{
+func TestCheckpointExample(t *testing.T) {
+	aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
 
@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// Get last checkpopint
-	param := checkpoint.SingleTrackingParam{
+	param := common.SingleTrackingParam{
 		Slug:           "ups",
 		TrackingNumber: "1234567890",
 	}

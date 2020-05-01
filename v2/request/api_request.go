@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/error"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 	"github.com/google/uuid"
@@ -31,7 +31,7 @@ type APIRequestImpl struct {
 }
 
 // NewRequest returns the instance of API Request
-func NewRequest(cfg *conf.AfterShipConf, limit *response.RateLimit) APIRequest {
+func NewRequest(cfg *common.AfterShipConf, limit *response.RateLimit) APIRequest {
 	return &APIRequestImpl{
 		APIKey:           cfg.APIKey,
 		Endpoint:         cfg.Endpoint,
@@ -64,8 +64,8 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 	req.Header.Add("aftership-api-key", impl.APIKey)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("request-id", uuid.New().String())
-	req.Header.Add("User-Agent", fmt.Sprintf("%s/%s", impl.UserAagentPrefix, conf.VERSION))
-	req.Header.Add("aftership-agent", fmt.Sprintf("go-sdk-%s", conf.VERSION))
+	req.Header.Add("User-Agent", fmt.Sprintf("%s/%s", impl.UserAagentPrefix, common.VERSION))
+	req.Header.Add("aftership-agent", fmt.Sprintf("go-sdk-%s", common.VERSION))
 
 	resp, err := impl.Client.Do(req)
 	if err != nil {

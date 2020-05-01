@@ -1,22 +1,22 @@
 package notification
 
 import (
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/error"
 	"github.com/aftership/aftership-sdk-go/v2/request"
-	"github.com/aftership/aftership-sdk-go/v2/tracking"
 )
 
 // Endpoint provides the interface for all notifications handling API calls
 type Endpoint interface {
 	// AddNotification Adds notifications to a tracking number.
-	AddNotification(param tracking.SingleTrackingParam, data Data) (Data, *error.AfterShipError)
+	AddNotification(param common.SingleTrackingParam, data Data) (Data, *error.AfterShipError)
 
 	// RemoveNotification Removes notifications from a tracking number.
-	RemoveNotification(param tracking.SingleTrackingParam, data Data) (Data, *error.AfterShipError)
+	RemoveNotification(param common.SingleTrackingParam, data Data) (Data, *error.AfterShipError)
 
 	// GetNotification Get contact information for the users to notify when the tracking changes. Please note that only customer receivers will be returned.
 	// Any email, sms or webhook that belongs to the Store will not be returned.
-	GetNotification(param tracking.SingleTrackingParam) (Data, *error.AfterShipError)
+	GetNotification(param common.SingleTrackingParam) (Data, *error.AfterShipError)
 }
 
 // EndpointImpl is the implementaion of notification endpoint
@@ -32,8 +32,8 @@ func NewEnpoint(req request.APIRequest) Endpoint {
 }
 
 // AddNotification Adds notifications to a tracking number.
-func (impl *EndpointImpl) AddNotification(param tracking.SingleTrackingParam, data Data) (Data, *error.AfterShipError) {
-	url, err := tracking.BuildTrackingURL(param, "notifications", "add")
+func (impl *EndpointImpl) AddNotification(param common.SingleTrackingParam, data Data) (Data, *error.AfterShipError) {
+	url, err := param.BuildTrackingURL("notifications", "add")
 	if err != nil {
 		return Data{}, err
 	}
@@ -47,8 +47,8 @@ func (impl *EndpointImpl) AddNotification(param tracking.SingleTrackingParam, da
 }
 
 // RemoveNotification Removes notifications from a tracking number.
-func (impl *EndpointImpl) RemoveNotification(param tracking.SingleTrackingParam, data Data) (Data, *error.AfterShipError) {
-	url, err := tracking.BuildTrackingURL(param, "notifications", "remove")
+func (impl *EndpointImpl) RemoveNotification(param common.SingleTrackingParam, data Data) (Data, *error.AfterShipError) {
+	url, err := param.BuildTrackingURL("notifications", "remove")
 	if err != nil {
 		return Data{}, err
 	}
@@ -63,8 +63,8 @@ func (impl *EndpointImpl) RemoveNotification(param tracking.SingleTrackingParam,
 
 // GetNotification Get contact information for the users to notify when the tracking changes. Please note that only customer receivers will be returned.
 // Any email, sms or webhook that belongs to the Store will not be returned.
-func (impl *EndpointImpl) GetNotification(param tracking.SingleTrackingParam) (Data, *error.AfterShipError) {
-	url, err := tracking.BuildTrackingURL(param, "notifications", "")
+func (impl *EndpointImpl) GetNotification(param common.SingleTrackingParam) (Data, *error.AfterShipError) {
+	url, err := param.BuildTrackingURL("notifications", "")
 	if err != nil {
 		return Data{}, err
 	}

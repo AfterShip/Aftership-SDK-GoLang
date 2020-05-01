@@ -5,18 +5,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/request"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
-
-func TestMain(m *testing.M) {
-	httpmock.Activate()
-	m.Run()
-	httpmock.DeactivateAndReset()
-}
 
 func TestCreateTracking(t *testing.T) {
 	httpmock.Activate()
@@ -46,11 +40,15 @@ func TestCreateTracking(t *testing.T) {
 	}
 
 	mockhttp("POST", "/trackings", 200, SingleTrackingEnvelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -58,15 +56,43 @@ func TestCreateTracking(t *testing.T) {
 	assert.Equal(t, exp, res)
 }
 
+func TestCreateTrackingError(t *testing.T) {
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEnpoint(req)
+
+	// Response with error
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	data := NewTrackingRequest{
+		Tracking: NewTracking{
+			TrackingNumber: "tracking_number",
+		},
+	}
+
+	mockhttp("POST", "/trackings", 401, SingleTrackingEnvelope{
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
+		SingleTrackingData{},
+	}, nil)
+
+	_, err := endpoint.CreateTracking(data)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized", err.Type)
+}
+
 func TestDeleteTracking(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := SingleTrackingParam{
-		"",
-		"ups",
-		"1Z9999999999999998",
-		nil,
+	p := common.SingleTrackingParam{
+		Slug:           "ups",
+		TrackingNumber: "1Z9999999999999998",
 	}
 
 	exp := SingleTrackingData{
@@ -77,16 +103,63 @@ func TestDeleteTracking(t *testing.T) {
 	}
 
 	mockhttp("DELETE", fmt.Sprintf("/trackings/%s/%s", p.Slug, p.TrackingNumber), 200, SingleTrackingEnvelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
 	res, _ := endpoint.DeleteTracking(p)
 	assert.Equal(t, exp, res)
+}
+
+func TestDeleteTrackingError(t *testing.T) {
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEnpoint(req)
+
+	// empty id, slug and tracking_number
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
+	}
+
+	_, err := endpoint.DeleteTracking(p)
+	assert.NotNil(t, err)
+	assert.Equal(t, "HandlerError", err.Type)
+
+	// Response with error
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	p = common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
+	}
+
+	mockhttp("DELETE", fmt.Sprintf("/trackings/%s/%s", p.Slug, p.TrackingNumber), 401, SingleTrackingEnvelope{
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
+		SingleTrackingData{},
+	}, nil)
+
+	_, err = endpoint.DeleteTracking(p)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized", err.Type)
 }
 
 func TestGetTrackings(t *testing.T) {
@@ -103,23 +176,27 @@ func TestGetTrackings(t *testing.T) {
 		Count: 2,
 		Limit: 10,
 		Trackings: []Tracking{
-			Tracking{
+			{
 				Slug:  "dhl",
 				Title: "Title Name",
 			},
-			Tracking{
+			{
 				Slug:  "ups",
 				Title: "Title Name",
 			},
 		},
 	}
 
-	mockhttp("GET", fmt.Sprintf("/trackings?page=%d&limit=%d", p.Page, p.Limit), 200, MultiTrackingsEnvelope{
-		response.Meta{200, "", ""},
+	mockhttp("GET", fmt.Sprintf("/trackings?limit=%d&page=%d", p.Limit, p.Page), 200, MultiTrackingsEnvelope{
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -127,15 +204,40 @@ func TestGetTrackings(t *testing.T) {
 	assert.Equal(t, exp, res)
 }
 
+func TestGetTrackingsError(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	p := MultiTrackingsParams{
+		Page:  1,
+		Limit: 10,
+	}
+
+	mockhttp("GET", fmt.Sprintf("/trackings?limit=%d&page=%d", p.Limit, p.Page), 401, MultiTrackingsEnvelope{
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
+		MultiTrackingsData{},
+	}, nil)
+
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEnpoint(req)
+	_, err := endpoint.GetTrackings(p)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized", err.Type)
+}
+
 func TestGetTracking(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := SingleTrackingParam{
-		"",
-		"ups",
-		"1Z9999999999999998",
-		nil,
+	p := common.SingleTrackingParam{
+		Slug:           "ups",
+		TrackingNumber: "1Z9999999999999998",
 	}
 
 	exp := SingleTrackingData{
@@ -146,27 +248,72 @@ func TestGetTracking(t *testing.T) {
 	}
 
 	mockhttp("GET", fmt.Sprintf("/trackings/%s/%s", p.Slug, p.TrackingNumber), 200, SingleTrackingEnvelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
-	res, _ := endpoint.GetTracking(p, GetTrackingParams{})
+	res, _ := endpoint.GetTracking(p, nil)
 	assert.Equal(t, exp, res)
+}
+
+func TestGetTrackingError(t *testing.T) {
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEnpoint(req)
+
+	// empty id, slug and tracking_number
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
+	}
+
+	_, err := endpoint.GetTracking(p, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, "HandlerError", err.Type)
+
+	// Response with error
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	p = common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
+	}
+
+	mockhttp("GET", fmt.Sprintf("/trackings/%s/%s", p.Slug, p.TrackingNumber), 401, SingleTrackingEnvelope{
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
+		SingleTrackingData{},
+	}, nil)
+
+	_, err = endpoint.GetTracking(p, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized", err.Type)
 }
 
 func TestUpdateTracking(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := SingleTrackingParam{
-		"",
-		"ups",
-		"1Z9999999999999998",
-		nil,
+	p := common.SingleTrackingParam{
+		Slug:           "ups",
+		TrackingNumber: "1Z9999999999999998",
 	}
 
 	data := UpdateTrackingRequest{
@@ -183,11 +330,15 @@ func TestUpdateTracking(t *testing.T) {
 	}
 
 	mockhttp("PUT", fmt.Sprintf("/trackings/%s/%s", p.Slug, p.TrackingNumber), 200, SingleTrackingEnvelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -195,15 +346,62 @@ func TestUpdateTracking(t *testing.T) {
 	assert.Equal(t, exp, res)
 }
 
+func TestUpdateTrackingError(t *testing.T) {
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEnpoint(req)
+
+	// empty id, slug and tracking_number
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
+	}
+
+	data := UpdateTrackingRequest{
+		UpdateTracking{
+			Title: "New Title",
+		},
+	}
+
+	_, err := endpoint.UpdateTracking(p, data)
+	assert.NotNil(t, err)
+	assert.Equal(t, "HandlerError", err.Type)
+
+	// Response with error
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	p = common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
+	}
+
+	mockhttp("PUT", fmt.Sprintf("/trackings/%s/%s", p.Slug, p.TrackingNumber), 401, SingleTrackingEnvelope{
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
+		SingleTrackingData{},
+	}, nil)
+
+	_, err = endpoint.UpdateTracking(p, data)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized", err.Type)
+}
+
 func TestReTrack(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := SingleTrackingParam{
-		"",
-		"ups",
-		"1Z9999999999999998",
-		nil,
+	p := common.SingleTrackingParam{
+		Slug:           "ups",
+		TrackingNumber: "1Z9999999999999998",
 	}
 
 	exp := SingleTrackingData{
@@ -214,11 +412,15 @@ func TestReTrack(t *testing.T) {
 	}
 
 	mockhttp("POST", fmt.Sprintf("/trackings/%s/%s/retrack", p.Slug, p.TrackingNumber), 200, SingleTrackingEnvelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -226,115 +428,47 @@ func TestReTrack(t *testing.T) {
 	assert.Equal(t, exp, res)
 }
 
-func TestBuildTrackingUrl(t *testing.T) {
-	// slug and tracking number
-	p := SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		nil,
+func TestReTrackError(t *testing.T) {
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEnpoint(req)
+
+	// empty id, slug and tracking_number
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
 	}
 
-	url, err := BuildTrackingURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/xq-express/LS404494276CN", url)
+	_, err := endpoint.ReTrack(p)
+	assert.NotNil(t, err)
+	assert.Equal(t, "HandlerError", err.Type)
 
-	// slug and tracking number, with subpath
-	url, err = BuildTrackingURL(p, "trackings", "retrack")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/xq-express/LS404494276CN/retrack", url)
+	// Response with error
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
 
-	// slug and tracking number, with optional parameters
-	p = SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		&SingleTrackingOptionalParams{
-			TrackingPostalCode: "1234",
+	p = common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
+	}
+
+	mockhttp("POST", fmt.Sprintf("/trackings/%s/%s/retrack", p.Slug, p.TrackingNumber), 401, SingleTrackingEnvelope{
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
 		},
-	}
-	url, err = BuildTrackingURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/xq-express/LS404494276CN?tracking_postal_code=1234", url)
+		SingleTrackingData{},
+	}, nil)
 
-	// slug and tracking number, with optional parameters and subpath
-	url, err = BuildTrackingURL(p, "trackings", "retrack")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/xq-express/LS404494276CN/retrack?tracking_postal_code=1234", url)
-
-	// id
-	p = SingleTrackingParam{
-		ID: "1234567890",
-	}
-
-	url, err = BuildTrackingURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/1234567890", url)
-
-	// id, with subpath
-	url, err = BuildTrackingURL(p, "trackings", "retrack")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/1234567890/retrack", url)
-
-	// id, with optional parameters
-	p = SingleTrackingParam{
-		ID: "1234567890",
-		OptionalParams: &SingleTrackingOptionalParams{
-			TrackingPostalCode: "1234",
-		},
-	}
-	url, err = BuildTrackingURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/1234567890?tracking_postal_code=1234", url)
-
-	// id, with optional parameters and subpath
-	url, err = BuildTrackingURL(p, "trackings", "retrack")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/1234567890/retrack?tracking_postal_code=1234", url)
-
-	// Encode slug and tracking number
-	p = SingleTrackingParam{
-		"",
-		"usps",
-		"ABCD/1234",
-		nil,
-	}
-
-	url, err = BuildTrackingURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/trackings/usps/ABCD%2F1234", url)
-}
-
-func TestBuildTrackingUrlError(t *testing.T) {
-	// should get error when no id, slug and tracking number
-	p := SingleTrackingParam{
-		"",
-		"",
-		"",
-		nil,
-	}
-	_, err := BuildTrackingURL(p, "", "")
+	_, err = endpoint.ReTrack(p)
 	assert.NotNil(t, err)
-
-	// should get error when only slug
-	p = SingleTrackingParam{
-		"",
-		"xq-express",
-		"",
-		nil,
-	}
-	_, err = BuildTrackingURL(p, "", "")
-	assert.NotNil(t, err)
-
-	// should get error when only tracking_number
-	p = SingleTrackingParam{
-		"",
-		"",
-		"LS404494276CN",
-		nil,
-	}
-	_, err = BuildTrackingURL(p, "", "")
-	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized", err.Type)
 }
 
 func mockhttp(method string, url string, status int, resp interface{}, headers map[string]string) {

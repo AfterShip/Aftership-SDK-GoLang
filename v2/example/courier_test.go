@@ -1,15 +1,16 @@
-package main
+package example
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/aftership/aftership-sdk-go/v2"
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/courier"
 )
 
-func main() {
-	aftership, err := aftership.NewAfterShip(&conf.AfterShipConf{
+func TestCourierExample(t *testing.T) {
+	aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
 

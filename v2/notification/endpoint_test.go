@@ -5,29 +5,22 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/request"
 	"github.com/aftership/aftership-sdk-go/v2/response"
-	"github.com/aftership/aftership-sdk-go/v2/tracking"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
-
-func TestMain(m *testing.M) {
-	httpmock.Activate()
-	m.Run()
-	httpmock.DeactivateAndReset()
-}
 
 func TestAddNotification(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := tracking.SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		nil,
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
 	}
 
 	exp := Data{
@@ -37,11 +30,15 @@ func TestAddNotification(t *testing.T) {
 		},
 	}
 	mockhttp("POST", fmt.Sprintf("/notifications/%s/%s/add", p.Slug, p.TrackingNumber), 200, Envelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -50,17 +47,17 @@ func TestAddNotification(t *testing.T) {
 }
 
 func TestAddNotificationError(t *testing.T) {
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
 
 	// empty id, slug and tracking_number
-	p := tracking.SingleTrackingParam{
-		"",
-		"",
-		"",
-		nil,
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
 	}
 
 	_, err := endpoint.AddNotification(p, Data{})
@@ -71,15 +68,19 @@ func TestAddNotificationError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = tracking.SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		nil,
+	p = common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
 	}
 
 	mockhttp("POST", fmt.Sprintf("/notifications/%s/%s/add", p.Slug, p.TrackingNumber), 401, Envelope{
-		response.Meta{401, "Invalid API key.", "Unauthorized"},
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
 		Data{},
 	}, nil)
 
@@ -92,11 +93,11 @@ func TestRemoveNotification(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := tracking.SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		nil,
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
 	}
 
 	exp := Data{
@@ -106,11 +107,15 @@ func TestRemoveNotification(t *testing.T) {
 		},
 	}
 	mockhttp("POST", fmt.Sprintf("/notifications/%s/%s/remove", p.Slug, p.TrackingNumber), 200, Envelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -119,17 +124,17 @@ func TestRemoveNotification(t *testing.T) {
 }
 
 func TestRemoveNotificationError(t *testing.T) {
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
 
 	// empty id, slug and tracking_number
-	p := tracking.SingleTrackingParam{
-		"",
-		"",
-		"",
-		nil,
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
 	}
 
 	_, err := endpoint.RemoveNotification(p, Data{})
@@ -140,15 +145,19 @@ func TestRemoveNotificationError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = tracking.SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		nil,
+	p = common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
 	}
 
 	mockhttp("POST", fmt.Sprintf("/notifications/%s/%s/remove", p.Slug, p.TrackingNumber), 401, Envelope{
-		response.Meta{401, "Invalid API key.", "Unauthorized"},
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
 		Data{},
 	}, nil)
 
@@ -161,11 +170,11 @@ func TestGetNotificationSetting(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := tracking.SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		nil,
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
 	}
 
 	exp := Data{
@@ -175,11 +184,15 @@ func TestGetNotificationSetting(t *testing.T) {
 		},
 	}
 	mockhttp("GET", fmt.Sprintf("/notifications/%s/%s", p.Slug, p.TrackingNumber), 200, Envelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -188,17 +201,17 @@ func TestGetNotificationSetting(t *testing.T) {
 }
 
 func TestGetotificationError(t *testing.T) {
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
 
 	// empty id, slug and tracking_number
-	p := tracking.SingleTrackingParam{
-		"",
-		"",
-		"",
-		nil,
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
 	}
 
 	_, err := endpoint.GetNotification(p)
@@ -209,15 +222,19 @@ func TestGetotificationError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = tracking.SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-		nil,
+	p = common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
 	}
 
 	mockhttp("GET", fmt.Sprintf("/notifications/%s/%s", p.Slug, p.TrackingNumber), 401, Envelope{
-		response.Meta{401, "Invalid API key.", "Unauthorized"},
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
 		Data{},
 	}, nil)
 

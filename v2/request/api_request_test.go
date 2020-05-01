@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
@@ -30,7 +30,7 @@ func TestMakeRequest(t *testing.T) {
 	// GET with status 200
 	mockhttp("GET", "/test", 200, exp, nil)
 
-	req := NewRequest(&conf.AfterShipConf{
+	req := NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 
@@ -60,7 +60,7 @@ func TestMakeRequestError(t *testing.T) {
 
 	mockhttp("GET", "/test", 500, nil, nil)
 
-	req := NewRequest(&conf.AfterShipConf{
+	req := NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 
@@ -89,7 +89,7 @@ func TestRateLimit(t *testing.T) {
 	})
 
 	rateLimit := &response.RateLimit{}
-	req := NewRequest(&conf.AfterShipConf{
+	req := NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, rateLimit)
 

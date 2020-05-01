@@ -1,17 +1,18 @@
-package main
+package example
 
 import (
 	"fmt"
 	"strconv"
+	"testing"
 	"time"
 
 	"github.com/aftership/aftership-sdk-go/v2"
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/tracking"
 )
 
-func main() {
-	aftership, err := aftership.NewAfterShip(&conf.AfterShipConf{
+func TestTrackingExample(t *testing.T) {
+	aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
 
@@ -56,7 +57,7 @@ func main() {
 	}
 
 	// Delete a tracking
-	param := tracking.SingleTrackingParam{
+	param := common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: trackingNumber,
 	}
@@ -82,12 +83,12 @@ func main() {
 	}
 
 	// Get tracking results of a single tracking.
-	param = tracking.SingleTrackingParam{
+	param = common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
 
-	result, err = aftership.Tracking.GetTracking(param, tracking.GetTrackingParams{})
+	result, err = aftership.Tracking.GetTracking(param, nil)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -95,11 +96,11 @@ func main() {
 	}
 
 	// Get tracking results of a single tracking by id.
-	param = tracking.SingleTrackingParam{
+	param = common.SingleTrackingParam{
 		ID: "rymq9l34ztbvvk9md2ync00r",
 	}
 
-	result, err = aftership.Tracking.GetTracking(param, tracking.GetTrackingParams{
+	result, err = aftership.Tracking.GetTracking(param, &tracking.GetTrackingParams{
 		Fields: "tracking_postal_code,title,order_id",
 	})
 	if err != nil {
@@ -109,7 +110,7 @@ func main() {
 	}
 
 	// Update a tracking.
-	param = tracking.SingleTrackingParam{
+	param = common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
@@ -128,7 +129,7 @@ func main() {
 	}
 
 	// Retrack an expired tracking.
-	param = tracking.SingleTrackingParam{
+	param = common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}

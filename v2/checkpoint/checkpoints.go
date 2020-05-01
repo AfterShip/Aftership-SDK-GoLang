@@ -27,14 +27,6 @@ type LastCheckpoint struct {
 	Checkpoint     Checkpoint `json:"checkpoint"`
 }
 
-// SingleTrackingParam identifies a single tracking
-// its mandatory to provide either Id or Slug and TrackingNumber both
-type SingleTrackingParam struct {
-	ID             string
-	Slug           string
-	TrackingNumber string
-}
-
 // LastCheckpointEnvelope is the message envelope for the last checkpoint API responses
 type LastCheckpointEnvelope struct {
 	Meta response.Meta  `json:"meta"`

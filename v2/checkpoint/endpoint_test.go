@@ -5,73 +5,20 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/request"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBuildUrl(t *testing.T) {
-	// slug and tracking number
-	p := SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
-	}
-
-	url, err := buildLastCheckpointURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/last_checkpoint/xq-express/LS404494276CN", url)
-
-	// slug and tracking number, has optional parameters
-	url, err = buildLastCheckpointURL(p, "slug", "en")
-	assert.Nil(t, err)
-	assert.Equal(t, "/last_checkpoint/xq-express/LS404494276CN?fields=slug&lang=en", url)
-
-	// id
-	p = SingleTrackingParam{
-		ID: "1234567890",
-	}
-
-	url, err = buildLastCheckpointURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/last_checkpoint/1234567890", url)
-
-	// id, has optional parameters
-	url, err = buildLastCheckpointURL(p, "slug", "en")
-	assert.Nil(t, err)
-	assert.Equal(t, "/last_checkpoint/1234567890?fields=slug&lang=en", url)
-
-	// should get error when no id, slug and tracking number
-	p = SingleTrackingParam{
-		"",
-		"",
-		"",
-	}
-	_, err = buildLastCheckpointURL(p, "", "")
-	assert.NotNil(t, err)
-
-	// Encode slug and tracking number
-	p = SingleTrackingParam{
-		"",
-		"usps",
-		"ABCD/1234",
-	}
-
-	url, err = buildLastCheckpointURL(p, "", "")
-	assert.Nil(t, err)
-	assert.Equal(t, "/last_checkpoint/usps/ABCD%2F1234", url)
-}
-
 func TestGetLastCheckpoint(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
+	p := common.SingleTrackingParam{
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
 	}
 	exp := LastCheckpoint{
 		ID:             "5b74f4958776db0e00b6f5ed",
@@ -81,11 +28,15 @@ func TestGetLastCheckpoint(t *testing.T) {
 		},
 	}
 	mockhttp("GET", fmt.Sprintf("/last_checkpoint/%s/%s", p.Slug, p.TrackingNumber), 200, LastCheckpointEnvelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -98,18 +49,21 @@ func TestError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := SingleTrackingParam{
-		"",
-		"xq-express",
-		"LS404494276CN",
+	p := common.SingleTrackingParam{
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
 	}
 
 	mockhttp("GET", fmt.Sprintf("/last_checkpoint/%s/%s", p.Slug, p.TrackingNumber), 401, LastCheckpointEnvelope{
-		response.Meta{401, "Invalid API key.", "Unauthorized"},
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
 		LastCheckpoint{},
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{}, nil)
+	req := request.NewRequest(&common.AfterShipConf{}, nil)
 	endpoint := NewEnpoint(req)
 	_, err := endpoint.GetLastCheckpoint(p, "", "")
 	assert.NotNil(t, err)

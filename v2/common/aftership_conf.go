@@ -1,4 +1,4 @@
-package conf
+package common
 
 // AfterShipConf is the config of AfterShip SDK client
 type AfterShipConf struct {

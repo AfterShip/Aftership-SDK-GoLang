@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aftership/aftership-sdk-go/v2/conf"
+	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/request"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 	"github.com/jarcoal/httpmock"
@@ -18,18 +18,22 @@ func TestGetCouriers(t *testing.T) {
 	exp := List{
 		Total: 1,
 		Couriers: []Courier{
-			Courier{
+			{
 				Slug: "ups",
 				Name: "UPS",
 			},
 		},
 	}
 	mockhttp("GET", "/couriers", 200, Envelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -43,11 +47,15 @@ func TestGetCouriersError(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	mockhttp("GET", "/couriers", 429, Envelope{
-		response.Meta{429, "You have exceeded the API call rate limit. Default limit is 10 requests per second.", "TooManyRequests"},
+		response.Meta{
+			Code:    429,
+			Message: "You have exceeded the API call rate limit. Default limit is 10 requests per second.",
+			Type:    "TooManyRequests",
+		},
 		List{},
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -63,18 +71,22 @@ func TestGetAllCouriers(t *testing.T) {
 	exp := List{
 		Total: 1,
 		Couriers: []Courier{
-			Courier{
+			{
 				Slug: "ups",
 				Name: "ups",
 			},
-			Courier{
+			{
 				Slug: "fedex",
 				Name: "FeDex",
 			},
 		},
 	}
 	mockhttp("GET", "/couriers/all", 200, Envelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, map[string]string{
 		"X-RateLimit-Reset":     "1458463600",
@@ -82,7 +94,7 @@ func TestGetAllCouriers(t *testing.T) {
 		"X-RateLimit-Remaining": "",
 	})
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -95,11 +107,15 @@ func TestGetAllCouriersError(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	mockhttp("GET", "/couriers/all", 429, Envelope{
-		response.Meta{429, "You have exceeded the API call rate limit. Default limit is 10 requests per second.", "TooManyRequests"},
+		response.Meta{
+			Code:    429,
+			Message: "You have exceeded the API call rate limit. Default limit is 10 requests per second.",
+			Type:    "TooManyRequests",
+		},
 		List{},
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -115,18 +131,22 @@ func TestDetectCouriers(t *testing.T) {
 	exp := DetectList{
 		Total: 2,
 		Couriers: []Courier{
-			Courier{
+			{
 				Slug: "ups",
 				Name: "ups",
 			},
 		},
 	}
 	mockhttp("POST", "/couriers/detect", 200, DetectEnvelope{
-		response.Meta{200, "", ""},
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
 		exp,
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -145,7 +165,7 @@ func TestDetectCouriers(t *testing.T) {
 }
 
 func TestInvalidDetectCouriers(t *testing.T) {
-	req := request.NewRequest(&conf.AfterShipConf{
+	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
@@ -159,12 +179,16 @@ func TestDetectCouriersError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockhttp("POST", "/couriers/detect", 429, Envelope{
-		response.Meta{401, "Invalid API key.", "Unauthorized"},
+	mockhttp("POST", "/couriers/detect", 401, Envelope{
+		response.Meta{
+			Code:    402,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
 		List{},
 	}, nil)
 
-	req := request.NewRequest(&conf.AfterShipConf{}, nil)
+	req := request.NewRequest(&common.AfterShipConf{}, nil)
 	endpoint := NewEnpoint(req)
 	_, err := endpoint.DetectCouriers(DetectCourierRequest{
 		Tracking: DetectParam{
