@@ -40,16 +40,71 @@ func TestGetLastCheckpoint(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEnpoint(req)
-	res, err := endpoint.GetLastCheckpoint(p, "", "")
+	res, err := endpoint.GetLastCheckpoint(p, nil)
+	assert.Equal(t, exp, res)
+	assert.Nil(t, err)
+}
+
+func TestGetLastCheckpointWithOptionalParams(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	p := common.SingleTrackingParam{
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+	}
+
+	op := &GetCheckpointParams{
+		Fields: "slug",
+		Lang:   "en",
+	}
+
+	exp := LastCheckpoint{
+		ID:             "5b74f4958776db0e00b6f5ed",
+		TrackingNumber: "111111111111",
+		Checkpoint: Checkpoint{
+			Slug: "slug",
+		},
+	}
+	mockhttp("GET", fmt.Sprintf("/last_checkpoint/%s/%s?fields=%s&lang=%s", p.Slug, p.TrackingNumber, op.Fields, op.Lang), 200, LastCheckpointEnvelope{
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
+		exp,
+	}, nil)
+
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEnpoint(req)
+	res, err := endpoint.GetLastCheckpoint(p, op)
 	assert.Equal(t, exp, res)
 	assert.Nil(t, err)
 }
 
 func TestError(t *testing.T) {
+	req := request.NewRequest(&common.AfterShipConf{}, nil)
+	endpoint := NewEnpoint(req)
+
+	// empty id, slug and tracking_number
+	p := common.SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
+	}
+
+	_, err := endpoint.GetLastCheckpoint(p, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, "HandlerError", err.Type)
+
+	// Response with error
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p = common.SingleTrackingParam{
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
 	}
@@ -63,9 +118,7 @@ func TestError(t *testing.T) {
 		LastCheckpoint{},
 	}, nil)
 
-	req := request.NewRequest(&common.AfterShipConf{}, nil)
-	endpoint := NewEnpoint(req)
-	_, err := endpoint.GetLastCheckpoint(p, "", "")
+	_, err = endpoint.GetLastCheckpoint(p, nil)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }

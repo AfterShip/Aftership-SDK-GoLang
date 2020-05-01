@@ -509,7 +509,7 @@ param := common.SingleTrackingParam{
     TrackingNumber: "1234567890",
 }
 
-result, err := aftership.LastCheckpoint.GetLastCheckpoint(param, "", "")
+result, err := aftership.LastCheckpoint.GetLastCheckpoint(param, nil)
 if err != nil {
     fmt.Println(err)
     return

@@ -99,19 +99,15 @@ type Tracking struct {
 
 // GetTrackingParams is the additional parameters in single tracking query
 type GetTrackingParams struct {
-	/**
-	 * List of fields to include in the response.
-	 * Use comma for multiple values. Fields to include:
-	 * tracking_postal_code,tracking_ship_date,tracking_account_number,tracking_key,
-	 * tracking_origin_country,tracking_destination_country,tracking_state,title,order_id,
-	 * tag,checkpoints,checkpoint_time, message, country_name
-	 * Defaults: none, Example: title,order_id
-	 */
+	// List of fields to include in the response.
+	// Use comma for multiple values. Fields to include:
+	// tracking_postal_code,tracking_ship_date,tracking_account_number,tracking_key,
+	// tracking_origin_country,tracking_destination_country,tracking_state,title,order_id,
+	// tag,checkpoints,checkpoint_time, message, country_name
+	// Defaults: none, Example: title,order_id
 	Fields string `url:"fields,omitempty" json:"fields,omitempty"`
 
-	/**
-	* Support Chinese to English translation for china-ems  and  china-post  only (Example: en)
-	 */
+	// Support Chinese to English translation for china-ems  and  china-post  only (Example: en)
 	Lang string `url:"lang,omitempty" json:"lang,omitempty"`
 }
 
