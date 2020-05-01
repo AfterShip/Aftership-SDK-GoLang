@@ -8,7 +8,7 @@
 
 ## Introduction:
 
-[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. Aftership-SDK-GoLang is a SDK to develop Apps using Aftership API in go-lang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
+[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. Aftership-SDK-GoLang is a SDK to develop Apps using [Aftership API v4](https://docs.aftership.com/api/4) in go-lang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
 
 You will need to create an account at [AfterShip](https://aftership.com) and obtain an API key first to access Aftership APIs using aftership-go SDK.
 
@@ -76,6 +76,7 @@ make test
 - [Error Handling](#error-handling)
 - [Examples](#examples)
   - [/couriers](#couriers)
+  - [/trackings](#trackings)
   - [/last_checkpoint](#last_checkpoint)
   - [/notifications](#notifications)
 - [Migrations](#migrations)
@@ -97,7 +98,7 @@ Example:
 aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
     Endpoint: "https://api.aftership.com/OLDER_VERSIONOUR_API_KEY",
-    APIKey: "aftership-sdk-go",
+    UserAagentPrefix: "aftership-sdk-go",
 })
 ```
 
@@ -114,12 +115,12 @@ Make request in a specific endpoint
 
 ```go
 // GET /trackings/:slug/:tracking_number
-param = common.SingleTrackingParam{
+param := common.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
 
-result, err = aftership.Tracking.GetTracking(param, nil)
+result, err := aftership.Tracking.GetTracking(param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -174,7 +175,6 @@ func main() {
     fmt.Println(aftership.RateLimit)
 
     // terminal output
-
     /*
     {
         Reset: 1588249242,
@@ -240,7 +240,7 @@ Error return by the SDK instance, mostly invalid param type when calling `constr
 ### Request Error
 
 Error return by the `request` module  
-`error.Type` could be `ETIMEDOUT`, `ECONNRESET`, etc.  
+`error.Type` could be `RequestError`, etc.  
 **Catch** by promise
 
 ```go
@@ -257,16 +257,18 @@ Error return by the `request` module
 
     fmt.Println(result)
 /*
-{ Type: "ENOTFOUND",
-  ... }
+{
+    Type: "RequestError",
+    Message: "Get https://api.aftership.com/v4/couriers: dial tcp: lookup api.aftership.com: no such host",
+    .....
+}
 */
 ```
 
 ### API Error
 
 Error return by the Aftership API  
-`error.type` shuold be same as https://www.aftership.com/docs/api/4/errors  
-**Catch** by promise
+`error.type` should be the same as https://www.aftership.com/docs/api/4/errors
 
 ```go
     aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
@@ -295,7 +297,10 @@ Error return by the Aftership API
 
 ### /couriers
 
+> Get a list of our supported couriers.
+
 **GET** /couriers
+> Return a list of couriers activated at your AfterShip account.
 
 ```go
 result, err := aftership.Courier.GetCouriers()
@@ -308,6 +313,7 @@ fmt.Println(result)
 ```
 
 **GET** /couriers/all
+> Return a list of all couriers.
 
 ```go
 result, err := aftership.Courier.GetAllCouriers()
@@ -320,6 +326,7 @@ fmt.Println(result)
 ```
 
 **POST** /couriers/detect
+> Return a list of matched couriers based on tracking number format and selected couriers or a list of couriers.
 
 ```go
 req := courier.DetectCourierRequest{
@@ -339,7 +346,10 @@ fmt.Println(result)
 
 ### /trackings
 
+> Create trackings, update trackings, and get tracking results.
+
 **POST** /trackings
+> Create a tracking.
 
 ```go
 newTracking := tracking.NewTrackingRequest{
@@ -378,6 +388,7 @@ fmt.Println(result)
 ```
 
 **DELETE** /trackings/:slug/:tracking_number
+> Delete a tracking.
 
 ```go
 param := common.SingleTrackingParam{
@@ -395,6 +406,7 @@ fmt.Println(result)
 ```
 
 **GET** /trackings
+> Get tracking results of multiple trackings.
 
 ```go
 multiParams := tracking.MultiTrackingsParams{
@@ -412,6 +424,7 @@ fmt.Println(result)
 ```
 
 **GET** /trackings/:slug/:tracking_number
+> Get tracking results of a single tracking.
 
 ```go
 param := common.SingleTrackingParam{
@@ -460,6 +473,7 @@ fmt.Println(result)
 ```
 
 **PUT** /trackings/:slug/:tracking_number
+> Update a tracking.
 
 ```go
 param := common.SingleTrackingParam{
@@ -483,6 +497,7 @@ fmt.Println(result)
 ```
 
 **POST** /trackings/:slug/:tracking_number/retrack
+> Retrack an expired tracking. Max 3 times per tracking.
 
 ```go
 param := common.SingleTrackingParam{
@@ -501,7 +516,10 @@ fmt.Println(result)
 
 ### /last_checkpoint
 
+> Get tracking information of the last checkpoint of a tracking.
+
 **GET** /last_checkpoint/:slug/:tracking_number
+> Return the tracking information of the last checkpoint of a single tracking.
 
 ```go
 param := common.SingleTrackingParam{
@@ -520,7 +538,10 @@ fmt.Println(result)
 
 ### /notifications
 
+> Get, add or remove contacts (sms or email) to be notified when the status of a tracking has changed.
+
 **GET** /notifications/:slug/:tracking_number
+> Get contact information for the users to notify when the tracking changes. 
 
 ```go
 param := common.SingleTrackingParam{
@@ -538,6 +559,7 @@ fmt.Println(result)
 ```
 
 **POST** /notifications/:slug/:tracking_number/add
+> Add notification receivers to a tracking number.
 
 ```go
 param := common.SingleTrackingParam{
@@ -562,6 +584,7 @@ fmt.Println(result)
 ```
 
 **POST** /notifications/:slug/:tracking_number/remove
+> Remove notification receivers from a tracking number.
 
 ```go
 param := common.SingleTrackingParam{
@@ -619,7 +642,7 @@ If you get stuck, we're here to help. The following are the best ways to get ass
 
 - [Issue Tracker](https://github.com/AfterShip/aftership-sdk-go/issues) for questions, feature requests, bug reports and general discussion related to this package. Try searching before you create a new issue.
 - [Slack AfterShip SDKs](https://aftership-sdk-slackin.herokuapp.com/): a Slack community, you can find the maintainers and users of this package in #aftership-sdks.
-- [Email us](support@aftership.com): `support@aftership.com`
+- [Email us](support@aftership.com) in AfterShip support: `support@aftership.com`
 
 ## Contributing
 

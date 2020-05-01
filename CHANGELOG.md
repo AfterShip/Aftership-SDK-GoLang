@@ -10,4 +10,5 @@
 - Compatibility
 	- Go >= 1.13
 - Breaking changes
-	- Completely reorganized the codes, consumers need to use new methods to use the SDK.
+	- Completely reorganized the SDK, see (Migrations)[https://github.com/AfterShip/aftership-sdk-go#migrations]
+	- Removed `auto retry` feature, consumers need to retry the request by themselves.
