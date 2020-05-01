@@ -268,7 +268,7 @@ Error return by the `request` module
 ### API Error
 
 Error return by the Aftership API  
-`error.type` should be the same as https://www.aftership.com/docs/api/4/errors
+`error.Type` should be the same as https://www.aftership.com/docs/api/4/errors
 
 ```go
     aftership, err := aftership.NewAfterShip(&common.AfterShipConf{

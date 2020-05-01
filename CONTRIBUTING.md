@@ -11,6 +11,13 @@ There are many ways that you can contribute to the AfterShip SDK project:
 
 All code submissions will be reviewed and tested by the team, and those that meet a high bar for both quality and design/roadmap appropriateness will be merged into the source. Be sure to follow the existing structure when adding new files/folders.
 
+All code should be error-free when run through `golint` and `go vet`. We recommend setting up your editor to:
+
+- Run goimports on save
+- Run golint and go vet to check for errors
+
+You can find information in editor support for Go tools here: [https://github.com/golang/go/wiki/IDEsAndTextEditorPlugins](https://github.com/golang/go/wiki/IDEsAndTextEditorPlugins)
+
 If you encounter any bugs with the library please file an issue in the [Issues](https://github.com/AfterShip/aftership-sdk-go/issues) section of the project.
 
 ## Things to keep in mind when contributing
