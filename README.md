@@ -1,5 +1,5 @@
 
-# Aftership-SDK-GoLang 
+# AfterShip-SDK-GoLang 
 
 [![Build Status](https://travis-ci.org/AfterShip/aftership-sdk-go.svg?branch=v2)](https://travis-ci.org/AfterShip/aftership-sdk-go)
 [![codecov.io](https://codecov.io/github/AfterShip/aftership-sdk-go/coverage.svg?branch=v2)](https://codecov.io/github/AfterShip/aftership-sdk-go?branch=v2)
@@ -8,21 +8,21 @@
 
 ## Introduction:
 
-[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. Aftership-SDK-GoLang is a SDK to develop Apps using [Aftership API v4](https://docs.aftership.com/api/4) in go-lang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
+[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. AfterShip-SDK-GoLang is a SDK to develop Apps using [AfterShip API v4](https://docs.aftership.com/api/4) in go-lang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
 
-You will need to create an account at [AfterShip](https://aftership.com) and obtain an API key first to access Aftership APIs using aftership-go SDK.
+You will need to create an account at [AfterShip](https://aftership.com) and obtain an API key first to access AfterShip APIs using aftership-go SDK.
 
 ## Installation
 
 ### Use `go mod` (recommend)
 
-````
-require github.com/aftership/aftership-sdk-go/v2 v2.0.0
+````go
+import "github.com/aftership/aftership-sdk-go/v2"
 ````
 
-### Use `go get` to retrieve the SDK.
+### Use `go get`
 
-````
+````shell
 go get github.com/aftership/aftership-sdk-go/v2
 ````
 
@@ -64,7 +64,7 @@ func main() {
 
 ## Test
 
-```
+```shell
 make test
 ```
 
@@ -267,8 +267,8 @@ Error return by the `request` module
 
 ### API Error
 
-Error return by the Aftership API  
-`error.Type` should be the same as https://www.aftership.com/docs/api/4/errors
+Error return by the AfterShip API  
+`error.type` should be the same as https://www.aftership.com/docs/api/4/errors
 
 ```go
     aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
