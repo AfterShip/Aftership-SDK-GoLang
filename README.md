@@ -1,5 +1,5 @@
 
-# AfterShip-SDK-GoLang 
+# aftership-sdk-go 
 
 [![Build Status](https://travis-ci.org/AfterShip/aftership-sdk-go.svg?branch=v2)](https://travis-ci.org/AfterShip/aftership-sdk-go)
 [![codecov.io](https://codecov.io/github/AfterShip/aftership-sdk-go/coverage.svg?branch=v2)](https://codecov.io/github/AfterShip/aftership-sdk-go?branch=v2)
@@ -8,23 +8,24 @@
 
 ## Introduction:
 
-[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. AfterShip-SDK-GoLang is a SDK to develop Apps using [AfterShip API v4](https://docs.aftership.com/api/4) in go-lang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
+[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. aftership-sdk-go is a SDK to develop Apps using [AfterShip API v4](https://docs.aftership.com/api/4) in go-lang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
 
 You will need to create an account at [AfterShip](https://aftership.com) and obtain an API key first to access AfterShip APIs using aftership-go SDK.
 
 ## Installation
 
-### Use `go mod` (recommend)
+aftership-sdk-go requires a Go version with [Modules](https://github.com/golang/go/wiki/Modules) support and uses import versioning. So please make sure to initialize a Go module before installing aftership-sdk-go:
 
-````go
-import "github.com/aftership/aftership-sdk-go/v2"
-````
-
-### Use `go get`
-
-````shell
+``` shell
+go mod init github.com/my/repo
 go get github.com/aftership/aftership-sdk-go/v2
-````
+```
+
+Import:
+
+``` go
+import "github.com/aftership/aftership-sdk-go/v2"
+```
 
 ## Quick Start
 
@@ -131,7 +132,7 @@ fmt.Println(result)
 
 ## Rate Limiter
 
-To understand AfterShip rate limit policy, please see `limit` session in https://www.aftership.com/docs/api/4
+To understand AfterShip rate limit policy, please see `Limit` section in https://www.aftership.com/docs/api/4
 
 You can get the recent rate limit by `aftership.RateLimit`. Initially all value are `0`.
 
@@ -209,30 +210,51 @@ Error return by the SDK instance, mostly invalid param type when calling `constr
 **Throw** by the SDK instance
 
 ```go
-    aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
-        APIKey: "YOUR_API_KEY",
-    })
+aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+    APIKey: "",
+})
 
-    // Get notification
-    param := common.SingleTrackingParam{
-        Slug: "dhl",
-    }
-
-    result, err := aftership.Notification.GetNotification(param)
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
-
-    fmt.Println(result)
+if err != nil {
+    fmt.Println(err)
+    return
 }
+
+/*
+{
+  Type: "ConstructorError",
+  Code: 0,
+  Message: "ConstructorError: Invalid API key",
+  Data: { },
+}
+*/
+```
+
+**Throw** by endpoint method
+
+```go
+aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+    APIKey: "YOUR_API_KEY",
+})
+
+// Get notification
+param := common.SingleTrackingParam{
+    Slug: "dhl",
+}
+
+result, err := aftership.Notification.GetNotification(param)
+if err != nil {
+    fmt.Println(err)
+    return
+}
+
+fmt.Println(result)
 
 /*
 {
   Type: "HandlerError",
   Code: 0,
   Message: "You must specify the id or slug and tracking number",
-  data: { dhl  <nil>},
+  Data: { dhl  <nil>},
 }
 */
 ```
@@ -244,18 +266,18 @@ Error return by the `request` module
 **Catch** by promise
 
 ```go
-    aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
-        APIKey: "YOUR_API_KEY",
-    })
+aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+    APIKey: "YOUR_API_KEY",
+})
 
-    // Get couriers
-    result, err := aftership.Courier.GetCouriers()
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
+// Get couriers
+result, err := aftership.Courier.GetCouriers()
+if err != nil {
+    fmt.Println(err)
+    return
+}
 
-    fmt.Println(result)
+fmt.Println(result)
 /*
 {
     Type: "RequestError",
@@ -268,21 +290,21 @@ Error return by the `request` module
 ### API Error
 
 Error return by the AfterShip API  
-`error.type` should be the same as https://www.aftership.com/docs/api/4/errors
+`error.Type` should be the same as https://www.aftership.com/docs/api/4/errors
 
 ```go
-    aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
-        APIKey: "YOUR_API_KEY",
-    })
+aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+    APIKey: "YOUR_API_KEY",
+})
 
-    // Get couriers
-    result, err := aftership.Courier.GetCouriers()
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
+// Get couriers
+result, err := aftership.Courier.GetCouriers()
+if err != nil {
+    fmt.Println(err)
+    return
+}
 
-    fmt.Println(result)
+fmt.Println(result)
 /*
 {
   Type: 'Unauthorized',
