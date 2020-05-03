@@ -46,7 +46,6 @@ Next, get the code:
 1. Fork this repo
 2. Clone your fork locally (`git clone https://github.com/<youruser>/aftership-sdk-go.git`)
 3. Open a terminal and move into your local copy (`cd aftership-sdk-go`)
-4. Change directory to the version you'd like to contribute, f.e. v2  (`cd v2`)
 
 ### Building
 
@@ -54,4 +53,4 @@ Run `go build`
 
 ### Testing
 
-Run `go test ./...`
+Run `make test`

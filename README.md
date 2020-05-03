@@ -37,7 +37,6 @@ import (
 
         "github.com/aftership/aftership-sdk-go/v2"
         "github.com/aftership/aftership-sdk-go/v2/common"
-        "github.com/aftership/aftership-sdk-go/v2/courier"
 )
 
 func main() {
