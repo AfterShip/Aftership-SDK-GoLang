@@ -40,10 +40,7 @@ func (impl *EndpointImpl) AddNotification(param common.SingleTrackingParam, data
 
 	var envelope Envelope
 	err = impl.request.MakeRequest("POST", url, data, &envelope)
-	if err != nil {
-		return Data{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // RemoveNotification Removes notifications from a tracking number.
@@ -55,10 +52,7 @@ func (impl *EndpointImpl) RemoveNotification(param common.SingleTrackingParam, d
 
 	var envelope Envelope
 	err = impl.request.MakeRequest("POST", url, data, &envelope)
-	if err != nil {
-		return Data{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // GetNotification Get contact information for the users to notify when the tracking changes. Please note that only customer receivers will be returned.
@@ -71,8 +65,5 @@ func (impl *EndpointImpl) GetNotification(param common.SingleTrackingParam) (Dat
 
 	var envelope Envelope
 	err = impl.request.MakeRequest("GET", url, nil, &envelope)
-	if err != nil {
-		return Data{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }

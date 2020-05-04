@@ -35,22 +35,14 @@ func NewEnpoint(req request.APIRequest) Endpoint {
 func (impl *EndpointImpl) GetCouriers() (List, *error.AfterShipError) {
 	var envelope Envelope
 	err := impl.request.MakeRequest("GET", "/couriers", nil, &envelope)
-	if err != nil {
-		return List{}, err
-	}
-
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // GetAllCouriers returns a list of all couriers.
 func (impl *EndpointImpl) GetAllCouriers() (List, *error.AfterShipError) {
 	var envelope Envelope
 	err := impl.request.MakeRequest("GET", "/couriers/all", nil, &envelope)
-	if err != nil {
-		return List{}, err
-	}
-
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // DetectCouriers returns a list of matched couriers based on tracking number format
@@ -62,9 +54,5 @@ func (impl *EndpointImpl) DetectCouriers(req DetectCourierRequest) (DetectList, 
 
 	var envelope DetectEnvelope
 	err := impl.request.MakeRequest("POST", "/couriers/detect", req, &envelope)
-	if err != nil {
-		return DetectList{}, err
-	}
-
-	return envelope.Data, nil
+	return envelope.Data, err
 }

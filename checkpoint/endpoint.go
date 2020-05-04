@@ -33,11 +33,7 @@ func (impl *EndpointImpl) GetLastCheckpoint(param common.SingleTrackingParam, op
 
 	var envelope LastCheckpointEnvelope
 	err = impl.request.MakeRequest("GET", url, nil, &envelope)
-	if err != nil {
-		return LastCheckpoint{}, err
-	}
-
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 func buildLastCheckpointURL(param common.SingleTrackingParam, optionalParams *GetCheckpointParams) (string, *error.AfterShipError) {

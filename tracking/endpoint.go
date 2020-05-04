@@ -43,11 +43,7 @@ func NewEnpoint(req request.APIRequest) Endpoint {
 func (impl *EndpointImpl) CreateTracking(newTracking NewTrackingRequest) (SingleTrackingData, *error.AfterShipError) {
 	var envelope SingleTrackingEnvelope
 	err := impl.request.MakeRequest("POST", "/trackings", newTracking, &envelope)
-	if err != nil {
-		return SingleTrackingData{}, err
-	}
-
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // DeleteTracking Deletes a tracking.
@@ -59,10 +55,7 @@ func (impl *EndpointImpl) DeleteTracking(param common.SingleTrackingParam) (Sing
 
 	var envelope SingleTrackingEnvelope
 	err = impl.request.MakeRequest("DELETE", url, nil, &envelope)
-	if err != nil {
-		return SingleTrackingData{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // GetTrackings Gets tracking results of multiple trackings.
@@ -74,10 +67,7 @@ func (impl *EndpointImpl) GetTrackings(params MultiTrackingsParams) (MultiTracki
 
 	var envelope MultiTrackingsEnvelope
 	err = impl.request.MakeRequest("GET", url, nil, &envelope)
-	if err != nil {
-		return MultiTrackingsData{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // GetTracking Gets tracking results of a single tracking.
@@ -94,10 +84,7 @@ func (impl *EndpointImpl) GetTracking(param common.SingleTrackingParam, optional
 
 	var envelope SingleTrackingEnvelope
 	err = impl.request.MakeRequest("GET", url, nil, &envelope)
-	if err != nil {
-		return SingleTrackingData{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // UpdateTracking Updates a tracking.
@@ -109,10 +96,7 @@ func (impl *EndpointImpl) UpdateTracking(param common.SingleTrackingParam, updat
 
 	var envelope SingleTrackingEnvelope
 	err = impl.request.MakeRequest("PUT", url, update, &envelope)
-	if err != nil {
-		return SingleTrackingData{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }
 
 // ReTrack an expired tracking once. Max. 3 times per tracking.
@@ -124,8 +108,5 @@ func (impl *EndpointImpl) ReTrack(param common.SingleTrackingParam) (SingleTrack
 
 	var envelope SingleTrackingEnvelope
 	err = impl.request.MakeRequest("POST", url, nil, &envelope)
-	if err != nil {
-		return SingleTrackingData{}, err
-	}
-	return envelope.Data, nil
+	return envelope.Data, err
 }

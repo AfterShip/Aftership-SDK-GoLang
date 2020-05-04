@@ -61,12 +61,14 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 		return error.MakeRequestError("RequestError", err, data)
 	}
 
+	// Add headers
 	req.Header.Add("aftership-api-key", impl.APIKey)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("request-id", uuid.New().String())
 	req.Header.Add("User-Agent", fmt.Sprintf("%s/%s", impl.UserAagentPrefix, common.VERSION))
 	req.Header.Add("aftership-agent", fmt.Sprintf("go-sdk-%s", common.VERSION))
 
+	// Send request
 	resp, err := impl.Client.Do(req)
 	if err != nil {
 		return error.MakeRequestError("RequestError", err, data)
