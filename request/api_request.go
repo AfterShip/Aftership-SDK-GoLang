@@ -15,13 +15,13 @@ import (
 	"github.com/google/uuid"
 )
 
-// APIRequest API request interface
+// APIRequest is the API request interface
 type APIRequest interface {
-	// MakeRequest Make a AfterShip API calls
+	// MakeRequest makes a AfterShip API calls
 	MakeRequest(method string, uri string, data interface{}, result response.AftershipResponse) *error.AfterShipError
 }
 
-// APIRequestImpl is the implementation of
+// APIRequestImpl is the implementation of API Request
 type APIRequestImpl struct {
 	Client           *http.Client
 	RateLimit        *response.RateLimit
@@ -40,7 +40,7 @@ func NewRequest(cfg *common.AfterShipConf, limit *response.RateLimit) APIRequest
 	}
 }
 
-// MakeRequest Make a AfterShip API calls
+// MakeRequest makes a AfterShip API calls
 func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interface{}, result response.AftershipResponse) *error.AfterShipError {
 	if impl.Client == nil {
 		impl.Client = &http.Client{}

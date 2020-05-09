@@ -8,19 +8,19 @@ import (
 
 // Endpoint provides the interface for all trackings API calls
 type Endpoint interface {
-	// CreateTracking Creates a tracking.
+	// CreateTracking creates a tracking.
 	CreateTracking(newTracking NewTrackingRequest) (SingleTrackingData, *error.AfterShipError)
 
-	// DeleteTracking Deletes a tracking.
+	// DeleteTracking deletes a tracking.
 	DeleteTracking(param common.SingleTrackingParam) (SingleTrackingData, *error.AfterShipError)
 
-	// GetTrackings Gets tracking results of multiple trackings.
+	// GetTrackings gets tracking results of multiple trackings.
 	GetTrackings(params MultiTrackingsParams) (MultiTrackingsData, *error.AfterShipError)
 
-	// GetTracking Gets tracking results of a single tracking.
+	// GetTracking gets tracking results of a single tracking.
 	GetTracking(param common.SingleTrackingParam, optionalParams *GetTrackingParams) (SingleTrackingData, *error.AfterShipError)
 
-	// UpdateTracking Updates a tracking.
+	// UpdateTracking updates a tracking.
 	UpdateTracking(param common.SingleTrackingParam, update UpdateTrackingRequest) (SingleTrackingData, *error.AfterShipError)
 
 	// ReTrack an expired tracking once. Max. 3 times per tracking.
@@ -46,7 +46,7 @@ func (impl *EndpointImpl) CreateTracking(newTracking NewTrackingRequest) (Single
 	return envelope.Data, err
 }
 
-// DeleteTracking Deletes a tracking.
+// DeleteTracking deletes a tracking.
 func (impl *EndpointImpl) DeleteTracking(param common.SingleTrackingParam) (SingleTrackingData, *error.AfterShipError) {
 	url, err := param.BuildTrackingURL("trackings", "")
 	if err != nil {
@@ -58,7 +58,7 @@ func (impl *EndpointImpl) DeleteTracking(param common.SingleTrackingParam) (Sing
 	return envelope.Data, err
 }
 
-// GetTrackings Gets tracking results of multiple trackings.
+// GetTrackings gets tracking results of multiple trackings.
 func (impl *EndpointImpl) GetTrackings(params MultiTrackingsParams) (MultiTrackingsData, *error.AfterShipError) {
 	url, err := common.BuildURLWithQueryString("/trackings", params)
 	if err != nil {
@@ -70,7 +70,7 @@ func (impl *EndpointImpl) GetTrackings(params MultiTrackingsParams) (MultiTracki
 	return envelope.Data, err
 }
 
-// GetTracking Gets tracking results of a single tracking.
+// GetTracking gets tracking results of a single tracking.
 func (impl *EndpointImpl) GetTracking(param common.SingleTrackingParam, optionalParams *GetTrackingParams) (SingleTrackingData, *error.AfterShipError) {
 	url, err := param.BuildTrackingURL("trackings", "")
 	if err != nil {
@@ -87,7 +87,7 @@ func (impl *EndpointImpl) GetTracking(param common.SingleTrackingParam, optional
 	return envelope.Data, err
 }
 
-// UpdateTracking Updates a tracking.
+// UpdateTracking updates a tracking.
 func (impl *EndpointImpl) UpdateTracking(param common.SingleTrackingParam, update UpdateTrackingRequest) (SingleTrackingData, *error.AfterShipError) {
 	url, err := param.BuildTrackingURL("trackings", "")
 	if err != nil {

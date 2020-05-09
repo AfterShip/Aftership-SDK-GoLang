@@ -24,7 +24,7 @@ func NewEnpoint(req request.APIRequest) Endpoint {
 	}
 }
 
-// GetLastCheckpoint Return the tracking information of the last checkpoint of a single tracking.
+// GetLastCheckpoint returns the tracking information of the last checkpoint of a single tracking.
 func (impl *EndpointImpl) GetLastCheckpoint(param common.SingleTrackingParam, optionalParams *GetCheckpointParams) (LastCheckpoint, *error.AfterShipError) {
 	url, err := buildLastCheckpointURL(param, optionalParams)
 	if err != nil {
