@@ -40,12 +40,14 @@ First, make sure you have the prerequisites installed and available on your `$PA
 
 - Git
 - Go 1.13 or higher
+- Install [pre-commit](https://pre-commit.com/)
 
 Next, get the code:
 
 1. Fork this repo
 2. Clone your fork locally (`git clone https://github.com/<youruser>/aftership-sdk-go.git`)
 3. Open a terminal and move into your local copy (`cd aftership-sdk-go`)
+4. Run `pre-commit install`
 
 ### Building
 
