@@ -8,9 +8,9 @@
 
 ## Introduction:
 
-[AfterShip](https://client.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. aftership-sdk-go is a SDK to develop Apps using [AfterShip API v4](https://docs.client.com/api/4) in golang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
+[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. aftership-sdk-go is a SDK to develop Apps using [AfterShip API v4](https://docs.aftership.com/api/4) in golang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
 
-You will need to create an account at [AfterShip](https://client.com) and obtain an API key first to access AfterShip APIs using aftership-go SDK.
+You will need to create an account at [AfterShip](https://aftership.com) and obtain an API key first to access AfterShip APIs using aftership-go SDK.
 
 ## Installation
 
@@ -89,7 +89,7 @@ Create AfterShip SDK instance with config
 
 - `config` - object of request config
   - `APIKey` - **Required**, AfterShip API key
-  - `Endpoint` - *string*, AfterShip endpoint, default "https://api.client.com/v4"
+  - `Endpoint` - *string*, AfterShip endpoint, default "https://api.aftership.com/v4"
   - `UserAagentPrefix` - *string*, prefix of User-Agent in headers, default "aftership-sdk-go"
 
 Example:
@@ -97,7 +97,7 @@ Example:
 ```go
 client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
-    Endpoint: "https://api.client.com/OLDER_VERSIONOUR_API_KEY",
+    Endpoint: "https://api.aftership.com/OLDER_VERSIONOUR_API_KEY",
     UserAagentPrefix: "aftership-sdk-go",
 })
 ```
@@ -131,7 +131,7 @@ fmt.Println(result)
 
 ## Rate Limiter
 
-To understand AfterShip rate limit policy, please see `Limit` section in https://www.client.com/docs/api/4
+To understand AfterShip rate limit policy, please see `Limit` section in https://www.aftership.com/docs/api/4
 
 You can get the recent rate limit by `client.RateLimit`. Initially all value are `0`.
 
@@ -280,7 +280,7 @@ fmt.Println(result)
 /*
 {
     Type: "RequestError",
-    Message: "Get https://api.client.com/v4/couriers: dial tcp: lookup api.client.com: no such host",
+    Message: "Get https://api.aftership.com/v4/couriers: dial tcp: lookup api.aftership.com: no such host",
     .....
 }
 */
@@ -289,7 +289,7 @@ fmt.Println(result)
 ### API Error
 
 Error return by the AfterShip API  
-`error.Type` should be the same as https://www.client.com/docs/api/4/errors
+`error.Type` should be the same as https://www.aftership.com/docs/api/4/errors
 
 ```go
 client, err := aftership.NewClient(&common.AfterShipConf{
