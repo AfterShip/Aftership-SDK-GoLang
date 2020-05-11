@@ -1,8 +1,8 @@
 package courier
 
 import (
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/tracking"
 	"github.com/aftership/aftership-sdk-go/v2/response"
-	"github.com/aftership/aftership-sdk-go/v2/tracking"
 )
 
 // Courier is the model describing an AfterShip courier

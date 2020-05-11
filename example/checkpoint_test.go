@@ -9,7 +9,7 @@ import (
 )
 
 func TestCheckpointExample(t *testing.T) {
-	aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
 

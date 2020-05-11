@@ -1,14 +1,14 @@
 package aftership
 
 import (
-	"github.com/aftership/aftership-sdk-go/v2/checkpoint"
 	"github.com/aftership/aftership-sdk-go/v2/common"
-	"github.com/aftership/aftership-sdk-go/v2/courier"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/checkpoint"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/courier"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/notification"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/tracking"
 	"github.com/aftership/aftership-sdk-go/v2/error"
-	"github.com/aftership/aftership-sdk-go/v2/notification"
 	"github.com/aftership/aftership-sdk-go/v2/request"
 	"github.com/aftership/aftership-sdk-go/v2/response"
-	"github.com/aftership/aftership-sdk-go/v2/tracking"
 )
 
 // AfterShip is the client for all AfterShip API calls
@@ -21,8 +21,8 @@ type AfterShip struct {
 	RateLimit      *response.RateLimit
 }
 
-// NewAfterShip returns the AfterShip client
-func NewAfterShip(cfg *common.AfterShipConf) (*AfterShip, *error.AfterShipError) {
+// NewClient returns the AfterShip client
+func NewClient(cfg *common.AfterShipConf) (*AfterShip, *error.AfterShipError) {
 	if cfg == nil {
 		return nil, error.MakeSdkError(error.ErrorTypeConstructorError, "ConstructorError: config is nil", "")
 	}

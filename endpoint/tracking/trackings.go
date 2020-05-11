@@ -3,7 +3,7 @@ package tracking
 import (
 	"time"
 
-	"github.com/aftership/aftership-sdk-go/v2/checkpoint"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/checkpoint"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 )
 

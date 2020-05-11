@@ -8,9 +8,9 @@
 
 ## Introduction:
 
-[AfterShip](https://aftership.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. aftership-sdk-go is a SDK to develop Apps using [AfterShip API v4](https://docs.aftership.com/api/4) in go-lang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
+[AfterShip](https://client.com) provides an API to Track & Notify of shipments from hundreds of couriers worldwide. aftership-sdk-go is a SDK to develop Apps using [AfterShip API v4](https://docs.client.com/api/4) in golang. All endpoints including couriers, tracking, last checkpoint and notification are supported.
 
-You will need to create an account at [AfterShip](https://aftership.com) and obtain an API key first to access AfterShip APIs using aftership-go SDK.
+You will need to create an account at [AfterShip](https://client.com) and obtain an API key first to access AfterShip APIs using aftership-go SDK.
 
 ## Installation
 
@@ -41,7 +41,7 @@ import (
 
 func main() {
 
-        aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+        client, err := aftership.NewClient(&common.AfterShipConf{
                 APIKey: "YOUR_API_KEY",
         })
 
@@ -51,7 +51,7 @@ func main() {
         }
 
         // Get couriers
-        result, err := aftership.Courier.GetCouriers()
+        result, err := client.Courier.GetCouriers()
         if err != nil {
                 fmt.Println(err)
                 return
@@ -70,7 +70,7 @@ make test
 
 ## Table of contents
 
-- [NewAfterShip(config)](#newaftershipconfig)
+- [NewClient(config)](#newaftershipconfig)
 - [Endpoints](#endpoints)
 - [Rate Limiter](#rate-limiter)
 - [Error Handling](#error-handling)
@@ -83,21 +83,21 @@ make test
 - [Help](#help)
 - [Contributing](#contributing)
 
-## NewAfterShip(config)
+## NewClient(config)
 
 Create AfterShip SDK instance with config
 
 - `config` - object of request config
   - `APIKey` - **Required**, AfterShip API key
-  - `Endpoint` - *string*, AfterShip endpoint, default "https://api.aftership.com/v4"
+  - `Endpoint` - *string*, AfterShip endpoint, default "https://api.client.com/v4"
   - `UserAagentPrefix` - *string*, prefix of User-Agent in headers, default "aftership-sdk-go"
 
 Example:
 
 ```go
-aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
-    Endpoint: "https://api.aftership.com/OLDER_VERSIONOUR_API_KEY",
+    Endpoint: "https://api.client.com/OLDER_VERSIONOUR_API_KEY",
     UserAagentPrefix: "aftership-sdk-go",
 })
 ```
@@ -120,7 +120,7 @@ param := common.SingleTrackingParam{
     TrackingNumber: "1588226550",
 }
 
-result, err := aftership.Tracking.GetTracking(param, nil)
+result, err := client.Tracking.GetTracking(param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -131,9 +131,9 @@ fmt.Println(result)
 
 ## Rate Limiter
 
-To understand AfterShip rate limit policy, please see `Limit` section in https://www.aftership.com/docs/api/4
+To understand AfterShip rate limit policy, please see `Limit` section in https://www.client.com/docs/api/4
 
-You can get the recent rate limit by `aftership.RateLimit`. Initially all value are `0`.
+You can get the recent rate limit by `client.RateLimit`. Initially all value are `0`.
 
 ```go
 import (
@@ -144,7 +144,7 @@ import (
 )
 
 func main() {
-    aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+    client, err := aftership.NewClient(&common.AfterShipConf{
         APIKey: "YOUR_API_KEY",
     })
 
@@ -152,7 +152,7 @@ func main() {
         fmt.Println(err)
         return
     }
-    fmt.Println(aftership.RateLimit)
+    fmt.Println(client.RateLimit)
 
     // terminal output
     /*
@@ -164,7 +164,7 @@ func main() {
     */
 
     // Get couriers
-    result, err := aftership.Courier.GetCouriers()
+    result, err := client.Courier.GetCouriers()
     if err != nil {
         fmt.Println(err)
     } else {
@@ -172,7 +172,7 @@ func main() {
     }
 
     // Rate Limit
-    fmt.Println(aftership.RateLimit)
+    fmt.Println(client.RateLimit)
 
     // terminal output
     /*
@@ -209,7 +209,7 @@ Error return by the SDK instance, mostly invalid param type when calling `constr
 **Throw** by the SDK instance
 
 ```go
-aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "",
 })
 
@@ -231,7 +231,7 @@ if err != nil {
 **Throw** by endpoint method
 
 ```go
-aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
 })
 
@@ -240,7 +240,7 @@ param := common.SingleTrackingParam{
     Slug: "dhl",
 }
 
-result, err := aftership.Notification.GetNotification(param)
+result, err := client.Notification.GetNotification(param)
 if err != nil {
     fmt.Println(err)
     return
@@ -265,12 +265,12 @@ Error return by the `request` module
 **Catch** by promise
 
 ```go
-aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
 })
 
 // Get couriers
-result, err := aftership.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers()
 if err != nil {
     fmt.Println(err)
     return
@@ -280,7 +280,7 @@ fmt.Println(result)
 /*
 {
     Type: "RequestError",
-    Message: "Get https://api.aftership.com/v4/couriers: dial tcp: lookup api.aftership.com: no such host",
+    Message: "Get https://api.client.com/v4/couriers: dial tcp: lookup api.client.com: no such host",
     .....
 }
 */
@@ -289,15 +289,15 @@ fmt.Println(result)
 ### API Error
 
 Error return by the AfterShip API  
-`error.Type` should be the same as https://www.aftership.com/docs/api/4/errors
+`error.Type` should be the same as https://www.client.com/docs/api/4/errors
 
 ```go
-aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
 })
 
 // Get couriers
-result, err := aftership.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers()
 if err != nil {
     fmt.Println(err)
     return
@@ -324,7 +324,7 @@ fmt.Println(result)
 > Return a list of couriers activated at your AfterShip account.
 
 ```go
-result, err := aftership.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers()
 if err != nil {
     fmt.Println(err)
     return
@@ -337,7 +337,7 @@ fmt.Println(result)
 > Return a list of all couriers.
 
 ```go
-result, err := aftership.Courier.GetAllCouriers()
+result, err := client.Courier.GetAllCouriers()
 if err != nil {
     fmt.Println(err)
     return
@@ -356,7 +356,7 @@ req := courier.DetectCourierRequest{
     },
 }
 
-result, err := aftership.Courier.DetectCouriers(req)
+result, err := client.Courier.DetectCouriers(req)
 if err != nil {
     fmt.Println(err)
     return
@@ -399,7 +399,7 @@ newTracking := tracking.NewTrackingRequest{
     },
 }
 
-result, err := aftership.Tracking.CreateTracking(newTracking)
+result, err := client.Tracking.CreateTracking(newTracking)
 if err != nil {
     fmt.Println(err)
     return
@@ -417,7 +417,7 @@ param := common.SingleTrackingParam{
    TrackingNumber: "1234567890",
 }
 
-result, err := aftership.Tracking.DeleteTracking(param)
+result, err := client.Tracking.DeleteTracking(param)
 if err != nil {
     fmt.Println(err)
     return
@@ -435,7 +435,7 @@ multiParams := tracking.MultiTrackingsParams{
     Limit: 10,
 }
 
-result, err := aftership.Tracking.GetTrackings(multiParams)
+result, err := client.Tracking.GetTrackings(multiParams)
 if err != nil {
     fmt.Println(err)
     return
@@ -453,7 +453,7 @@ param := common.SingleTrackingParam{
     TrackingNumber: "1588226550",
 }
 
-result, err := aftership.Tracking.GetTracking(param, nil)
+result, err := client.Tracking.GetTracking(param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -484,7 +484,7 @@ param := common.SingleTrackingParam{
     ID: "1234567890",
 }
 
-result, err := aftership.Tracking.GetTracking(param, nil)
+result, err := client.Tracking.GetTracking(param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -508,7 +508,7 @@ updateReq := tracking.UpdateTrackingRequest{
     },
 }
 
-result, err := aftership.Tracking.UpdateTracking(param, updateReq)
+result, err := client.Tracking.UpdateTracking(param, updateReq)
 if err != nil {
     fmt.Println(err)
     return
@@ -526,7 +526,7 @@ param := common.SingleTrackingParam{
     TrackingNumber: "1588226550",
 }
 
-result, err := aftership.Tracking.ReTrack(param)
+result, err := client.Tracking.ReTrack(param)
 if err != nil {
     fmt.Println(err)
     return
@@ -548,7 +548,7 @@ param := common.SingleTrackingParam{
     TrackingNumber: "1234567890",
 }
 
-result, err := aftership.LastCheckpoint.GetLastCheckpoint(param, nil)
+result, err := client.LastCheckpoint.GetLastCheckpoint(param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -570,7 +570,7 @@ param := common.SingleTrackingParam{
     TrackingNumber: "1588226550",
 }
 
-result, err := aftership.Notification.GetNotification(param)
+result, err := client.Notification.GetNotification(param)
 if err != nil {
     fmt.Println(err)
     return
@@ -595,7 +595,7 @@ data := notification.Data{
     },
 }
 
-result, err := aftership.Notification.AddNotification(param, data)
+result, err := client.Notification.AddNotification(param, data)
 if err != nil {
     fmt.Println(err)
     return
@@ -620,7 +620,7 @@ data := notification.Data{
     },
 }
 
-result, err := aftership.Notification.RemoveNotification(param, data)
+result, err := client.Notification.RemoveNotification(param, data)
 if err != nil {
     fmt.Println(err)
     return
@@ -644,11 +644,11 @@ if (meta.Code == 200) {
 }
 
 // new version (v2)
-aftership, err := aftership.NewAfterShip(&common.AfterShipConf{
+client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
 })
 
-result, err := aftership.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers()
 if err != nil {
     fmt.Println(err)
     return

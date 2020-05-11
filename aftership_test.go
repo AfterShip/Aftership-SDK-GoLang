@@ -9,7 +9,7 @@ import (
 
 func TestNilConfig(t *testing.T) {
 	// Config is nil
-	_, err := NewAfterShip(nil)
+	_, err := NewClient(nil)
 	assert.NotNil(t, err)
 
 	expectedMsg := "ConstructorError: config is nil"
@@ -20,7 +20,7 @@ func TestNilConfig(t *testing.T) {
 
 func TestInvalidAPIKey(t *testing.T) {
 	// API Key is not specified
-	_, err := NewAfterShip(&common.AfterShipConf{})
+	_, err := NewClient(&common.AfterShipConf{})
 	assert.NotNil(t, err)
 
 	expectedMsg := "ConstructorError: Invalid API key"
@@ -31,7 +31,7 @@ func TestInvalidAPIKey(t *testing.T) {
 
 func TestDefaultConfig(t *testing.T) {
 	// API Key is specified
-	client, err := NewAfterShip(&common.AfterShipConf{
+	client, err := NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
 
@@ -46,7 +46,7 @@ func TestSpecificedConfig(t *testing.T) {
 	endpoint := "YOUR_ENDPOINT"
 	agent := "YOUR_AGENT"
 
-	client, err := NewAfterShip(&common.AfterShipConf{
+	client, err := NewClient(&common.AfterShipConf{
 		APIKey:           apiKey,
 		Endpoint:         endpoint,
 		UserAagentPrefix: agent,
