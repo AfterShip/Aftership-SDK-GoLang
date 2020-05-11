@@ -76,6 +76,9 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 
 	defer resp.Body.Close()
 	contents, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return error.MakeRequestError("RequestError", err, data)
+	}
 
 	// Rate Limit
 	setRateLimit(impl.RateLimit, resp)

@@ -36,7 +36,7 @@ func TestGetCouriers(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, err := endpoint.GetCouriers()
 	assert.Equal(t, exp, res)
 	assert.Nil(t, err)
@@ -58,7 +58,7 @@ func TestGetCouriersError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	_, err := endpoint.GetCouriers()
 	assert.NotNil(t, err)
 	assert.Equal(t, "TooManyRequests", err.Type)
@@ -97,7 +97,7 @@ func TestGetAllCouriers(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.GetAllCouriers()
 	assert.Equal(t, exp, res)
 }
@@ -118,7 +118,7 @@ func TestGetAllCouriersError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	_, err := endpoint.GetAllCouriers()
 	assert.NotNil(t, err)
 	assert.Equal(t, "TooManyRequests", err.Type)
@@ -149,7 +149,7 @@ func TestDetectCouriers(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	result, _ := endpoint.DetectCouriers(DetectCourierRequest{
 		Tracking: DetectParam{
 			"906587618687",
@@ -168,7 +168,7 @@ func TestInvalidDetectCouriers(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	_, err := endpoint.DetectCouriers(DetectCourierRequest{})
 
 	assert.NotNil(t, err)
@@ -189,7 +189,7 @@ func TestDetectCouriersError(t *testing.T) {
 	}, nil)
 
 	req := request.NewRequest(&common.AfterShipConf{}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	_, err := endpoint.DetectCouriers(DetectCourierRequest{
 		Tracking: DetectParam{
 			TrackingNumber: "906587618687",

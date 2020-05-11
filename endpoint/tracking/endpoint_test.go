@@ -51,7 +51,7 @@ func TestCreateTracking(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.CreateTracking(data)
 	assert.Equal(t, exp, res)
 }
@@ -60,7 +60,7 @@ func TestCreateTrackingError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// Response with error
 	httpmock.Activate()
@@ -114,7 +114,7 @@ func TestDeleteTracking(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.DeleteTracking(p)
 	assert.Equal(t, exp, res)
 }
@@ -123,7 +123,7 @@ func TestDeleteTrackingError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{
@@ -199,7 +199,7 @@ func TestGetTrackings(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.GetTrackings(p)
 	assert.Equal(t, exp, res)
 }
@@ -225,7 +225,7 @@ func TestGetTrackingsError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	_, err := endpoint.GetTrackings(p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
@@ -259,7 +259,7 @@ func TestGetTracking(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.GetTracking(p, nil)
 	assert.Equal(t, exp, res)
 }
@@ -268,7 +268,7 @@ func TestGetTrackingError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{
@@ -341,7 +341,7 @@ func TestUpdateTracking(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.UpdateTracking(p, data)
 	assert.Equal(t, exp, res)
 }
@@ -350,7 +350,7 @@ func TestUpdateTrackingError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{
@@ -423,7 +423,7 @@ func TestReTrack(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.ReTrack(p)
 	assert.Equal(t, exp, res)
 }
@@ -432,7 +432,7 @@ func TestReTrackError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{

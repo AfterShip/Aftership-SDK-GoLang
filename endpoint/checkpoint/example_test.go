@@ -1,14 +1,13 @@
-package example
+package checkpoint_test
 
 import (
 	"fmt"
-	"testing"
 
 	"github.com/aftership/aftership-sdk-go/v2"
 	"github.com/aftership/aftership-sdk-go/v2/common"
 )
 
-func TestCheckpointExample(t *testing.T) {
+func Example_getLastCheckpoint() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})

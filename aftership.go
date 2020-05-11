@@ -43,10 +43,10 @@ func NewClient(cfg *common.AfterShipConf) (*AfterShip, *error.AfterShipError) {
 	req := request.NewRequest(cfg, rateLimit)
 	return &AfterShip{
 		Config:         cfg,
-		Courier:        courier.NewEnpoint(req),
-		Tracking:       tracking.NewEnpoint(req),
-		LastCheckpoint: checkpoint.NewEnpoint(req),
-		Notification:   notification.NewEnpoint(req),
+		Courier:        courier.NewEndpoint(req),
+		Tracking:       tracking.NewEndpoint(req),
+		LastCheckpoint: checkpoint.NewEndpoint(req),
+		Notification:   notification.NewEndpoint(req),
 		RateLimit:      rateLimit,
 	}, nil
 }

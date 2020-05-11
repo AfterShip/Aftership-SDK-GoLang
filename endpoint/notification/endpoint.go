@@ -24,8 +24,8 @@ type EndpointImpl struct {
 	request request.APIRequest
 }
 
-// NewEnpoint creates a instance of notification endpoint
-func NewEnpoint(req request.APIRequest) Endpoint {
+// NewEndpoint creates a instance of notification endpoint
+func NewEndpoint(req request.APIRequest) Endpoint {
 	return &EndpointImpl{
 		request: req,
 	}

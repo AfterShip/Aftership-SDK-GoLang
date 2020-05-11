@@ -1,9 +1,8 @@
-package example
+package tracking_test
 
 import (
 	"fmt"
 	"strconv"
-	"testing"
 	"time"
 
 	"github.com/aftership/aftership-sdk-go/v2"
@@ -11,7 +10,7 @@ import (
 	"github.com/aftership/aftership-sdk-go/v2/endpoint/tracking"
 )
 
-func TestTrackingExample(t *testing.T) {
+func ExampleEndpointImpl_CreateTracking() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
@@ -52,21 +51,45 @@ func TestTrackingExample(t *testing.T) {
 	result, err := client.Tracking.CreateTracking(newTracking)
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(result)
+		return
+	}
+
+	fmt.Println(result)
+}
+
+func ExampleEndpointImpl_DeleteTracking() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	// Delete a tracking
 	param := common.SingleTrackingParam{
 		Slug:           "dhl",
-		TrackingNumber: trackingNumber,
+		TrackingNumber: "1234567890",
 	}
 
-	result, err = client.Tracking.DeleteTracking(param)
+	result, err := client.Tracking.DeleteTracking(param)
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(result)
+		return
+	}
+
+	fmt.Println(result)
+}
+
+func ExampleEndpointImpl_GetTrackings() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	// Get tracking results of multiple trackings.
@@ -78,17 +101,29 @@ func TestTrackingExample(t *testing.T) {
 	multiResults, err := client.Tracking.GetTrackings(multiParams)
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(multiResults)
+		return
+	}
+
+	fmt.Println(multiResults)
+}
+
+func ExampleEndpointImpl_GetTracking() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	// Get tracking results of a single tracking.
-	param = common.SingleTrackingParam{
+	param := common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
 
-	result, err = client.Tracking.GetTracking(param, nil)
+	result, err := client.Tracking.GetTracking(param, nil)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -108,9 +143,20 @@ func TestTrackingExample(t *testing.T) {
 	} else {
 		fmt.Println(result)
 	}
+}
+
+func ExampleEndpointImpl_UpdateTracking() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	// Update a tracking.
-	param = common.SingleTrackingParam{
+	param := common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
@@ -121,20 +167,32 @@ func TestTrackingExample(t *testing.T) {
 		},
 	}
 
-	result, err = client.Tracking.UpdateTracking(param, updateReq)
+	result, err := client.Tracking.UpdateTracking(param, updateReq)
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(result)
+		return
+	}
+
+	fmt.Println(result)
+}
+
+func ExampleEndpointImpl_ReTrack() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	// Retrack an expired tracking.
-	param = common.SingleTrackingParam{
+	param := common.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
 
-	result, err = client.Tracking.ReTrack(param)
+	result, err := client.Tracking.ReTrack(param)
 	if err != nil {
 		fmt.Println(err)
 	} else {

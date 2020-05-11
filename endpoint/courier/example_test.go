@@ -1,15 +1,14 @@
-package example
+package courier_test
 
 import (
 	"fmt"
-	"testing"
 
 	"github.com/aftership/aftership-sdk-go/v2"
 	"github.com/aftership/aftership-sdk-go/v2/common"
 	"github.com/aftership/aftership-sdk-go/v2/endpoint/courier"
 )
 
-func TestCourierExample(t *testing.T) {
+func ExampleEndpointImpl_GetCouriers() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
@@ -23,19 +22,40 @@ func TestCourierExample(t *testing.T) {
 	result, err := client.Courier.GetCouriers()
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(result)
+		return
 	}
 
-	// Rate Limit
-	fmt.Println(client.RateLimit)
+	fmt.Println(result)
+}
 
-	// Get all couriers
-	result, err = client.Courier.GetAllCouriers()
+func ExampleEndpointImpl_GetAllCouriers() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	})
+
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(result)
+		return
+	}
+
+	// Get all couriers
+	result, err := client.Courier.GetAllCouriers()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(result)
+}
+
+func ExampleEndpointImpl_DetectCouriers() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	// Detect courier
@@ -48,7 +68,8 @@ func TestCourierExample(t *testing.T) {
 	list, err := client.Courier.DetectCouriers(req)
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(list)
+		return
 	}
+
+	fmt.Println(list)
 }

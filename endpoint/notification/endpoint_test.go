@@ -41,7 +41,7 @@ func TestAddNotification(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.AddNotification(p, exp)
 	assert.Equal(t, exp, res)
 }
@@ -50,7 +50,7 @@ func TestAddNotificationError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{
@@ -118,7 +118,7 @@ func TestRemoveNotification(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.RemoveNotification(p, exp)
 	assert.Equal(t, exp, res)
 }
@@ -127,7 +127,7 @@ func TestRemoveNotificationError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{
@@ -195,7 +195,7 @@ func TestGetNotificationSetting(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, _ := endpoint.GetNotification(p)
 	assert.Equal(t, exp, res)
 }
@@ -204,7 +204,7 @@ func TestGetotificationError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{

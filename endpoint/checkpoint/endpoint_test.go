@@ -39,7 +39,7 @@ func TestGetLastCheckpoint(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, err := endpoint.GetLastCheckpoint(p, nil)
 	assert.Equal(t, exp, res)
 	assert.Nil(t, err)
@@ -78,7 +78,7 @@ func TestGetLastCheckpointWithOptionalParams(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 	res, err := endpoint.GetLastCheckpoint(p, op)
 	assert.Equal(t, exp, res)
 	assert.Nil(t, err)
@@ -86,7 +86,7 @@ func TestGetLastCheckpointWithOptionalParams(t *testing.T) {
 
 func TestError(t *testing.T) {
 	req := request.NewRequest(&common.AfterShipConf{}, nil)
-	endpoint := NewEnpoint(req)
+	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
 	p := common.SingleTrackingParam{
