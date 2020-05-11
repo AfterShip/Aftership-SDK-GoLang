@@ -8,7 +8,7 @@ import (
 
 	"github.com/aftership/aftership-sdk-go/v2"
 	"github.com/aftership/aftership-sdk-go/v2/common"
-	"github.com/aftership/aftership-sdk-go/v2/tracking"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/tracking"
 )
 
 func TestTrackingExample(t *testing.T) {
@@ -49,7 +49,7 @@ func TestTrackingExample(t *testing.T) {
 		},
 	}
 
-	result, err := aftership.Tracking.CreateTracking(newTracking)
+	result, err := client.Tracking.CreateTracking(newTracking)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -62,7 +62,7 @@ func TestTrackingExample(t *testing.T) {
 		TrackingNumber: trackingNumber,
 	}
 
-	result, err = aftership.Tracking.DeleteTracking(param)
+	result, err = client.Tracking.DeleteTracking(param)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -75,7 +75,7 @@ func TestTrackingExample(t *testing.T) {
 		Limit: 10,
 	}
 
-	multiResults, err := aftership.Tracking.GetTrackings(multiParams)
+	multiResults, err := client.Tracking.GetTrackings(multiParams)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -88,7 +88,7 @@ func TestTrackingExample(t *testing.T) {
 		TrackingNumber: "1588226550",
 	}
 
-	result, err = aftership.Tracking.GetTracking(param, nil)
+	result, err = client.Tracking.GetTracking(param, nil)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -100,7 +100,7 @@ func TestTrackingExample(t *testing.T) {
 		ID: "rymq9l34ztbvvk9md2ync00r",
 	}
 
-	result, err = aftership.Tracking.GetTracking(param, &tracking.GetTrackingParams{
+	result, err = client.Tracking.GetTracking(param, &tracking.GetTrackingParams{
 		Fields: "tracking_postal_code,title,order_id",
 	})
 	if err != nil {
@@ -121,7 +121,7 @@ func TestTrackingExample(t *testing.T) {
 		},
 	}
 
-	result, err = aftership.Tracking.UpdateTracking(param, updateReq)
+	result, err = client.Tracking.UpdateTracking(param, updateReq)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -134,7 +134,7 @@ func TestTrackingExample(t *testing.T) {
 		TrackingNumber: "1588226550",
 	}
 
-	result, err = aftership.Tracking.ReTrack(param)
+	result, err = client.Tracking.ReTrack(param)
 	if err != nil {
 		fmt.Println(err)
 	} else {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/aftership/aftership-sdk-go/v2"
 	"github.com/aftership/aftership-sdk-go/v2/common"
-	"github.com/aftership/aftership-sdk-go/v2/courier"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/courier"
 )
 
 func TestCourierExample(t *testing.T) {
@@ -20,7 +20,7 @@ func TestCourierExample(t *testing.T) {
 	}
 
 	// Get couriers
-	result, err := aftership.Courier.GetCouriers()
+	result, err := client.Courier.GetCouriers()
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -28,10 +28,10 @@ func TestCourierExample(t *testing.T) {
 	}
 
 	// Rate Limit
-	fmt.Println(aftership.RateLimit)
+	fmt.Println(client.RateLimit)
 
 	// Get all couriers
-	result, err = aftership.Courier.GetAllCouriers()
+	result, err = client.Courier.GetAllCouriers()
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -45,7 +45,7 @@ func TestCourierExample(t *testing.T) {
 		},
 	}
 
-	list, err := aftership.Courier.DetectCouriers(req)
+	list, err := client.Courier.DetectCouriers(req)
 	if err != nil {
 		fmt.Println(err)
 	} else {

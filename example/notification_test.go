@@ -6,7 +6,7 @@ import (
 
 	"github.com/aftership/aftership-sdk-go/v2"
 	"github.com/aftership/aftership-sdk-go/v2/common"
-	"github.com/aftership/aftership-sdk-go/v2/notification"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/notification"
 )
 
 func TestNotificationExample(t *testing.T) {
@@ -25,7 +25,7 @@ func TestNotificationExample(t *testing.T) {
 		TrackingNumber: "1588226550",
 	}
 
-	result, err := aftership.Notification.GetNotification(param)
+	result, err := client.Notification.GetNotification(param)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -39,7 +39,7 @@ func TestNotificationExample(t *testing.T) {
 			Smses:  []string{"+85291239123", "+85261236123", "Invalid Mobile Phone Number"},
 		},
 	}
-	result, err = aftership.Notification.AddNotification(param, data)
+	result, err = client.Notification.AddNotification(param, data)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -53,7 +53,7 @@ func TestNotificationExample(t *testing.T) {
 			Smses:  []string{"+85261236123"},
 		},
 	}
-	result, err = aftership.Notification.RemoveNotification(param, data)
+	result, err = client.Notification.RemoveNotification(param, data)
 	if err != nil {
 		fmt.Println(err)
 	} else {
