@@ -8,7 +8,7 @@ import (
 	"github.com/aftership/aftership-sdk-go/v2/endpoint/notification"
 )
 
-func ExampleEndpointImpl_GetNotification() {
+func ExampleEndpoint_GetNotification() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
@@ -33,7 +33,7 @@ func ExampleEndpointImpl_GetNotification() {
 	fmt.Println(result)
 }
 
-func ExampleEndpointImpl_AddNotification() {
+func ExampleEndpoint_AddNotification() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
@@ -64,7 +64,7 @@ func ExampleEndpointImpl_AddNotification() {
 	fmt.Println(result)
 }
 
-func ExampleEndpointImpl_RemoveNotification() {
+func ExampleEndpoint_RemoveNotification() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})

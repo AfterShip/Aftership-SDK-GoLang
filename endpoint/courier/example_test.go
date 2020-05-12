@@ -8,7 +8,7 @@ import (
 	"github.com/aftership/aftership-sdk-go/v2/endpoint/courier"
 )
 
-func ExampleEndpointImpl_GetCouriers() {
+func ExampleEndpoint_GetCouriers() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
@@ -28,7 +28,7 @@ func ExampleEndpointImpl_GetCouriers() {
 	fmt.Println(result)
 }
 
-func ExampleEndpointImpl_GetAllCouriers() {
+func ExampleEndpoint_GetAllCouriers() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
@@ -48,7 +48,7 @@ func ExampleEndpointImpl_GetAllCouriers() {
 	fmt.Println(result)
 }
 
-func ExampleEndpointImpl_DetectCouriers() {
+func ExampleEndpoint_DetectCouriers() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	})
