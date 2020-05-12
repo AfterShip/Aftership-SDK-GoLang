@@ -1,6 +1,7 @@
 package request
 
 import (
+	"errors"
 	"net/http"
 	"testing"
 
@@ -54,20 +55,55 @@ func TestMakeRequest(t *testing.T) {
 	assert.Equal(t, exp, result)
 }
 
-func TestMakeRequestError(t *testing.T) {
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	mockhttp("GET", "/test", 500, nil, nil)
-
+func TestNewRequestError(t *testing.T) {
 	req := NewRequest(&common.AfterShipConf{
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 
 	var result mockData
-	err := req.MakeRequest("GET", "/test", nil, &result)
+	// Invalid data
+	err := req.MakeRequest("GET", "/test", make(chan int), &result)
+	assert.NotNil(t, err)
+	assert.Equal(t, "JsonError", err.Type)
+
+	// Bad method
+	err = req.MakeRequest("bad method", "/test", nil, &result)
+	assert.NotNil(t, err)
+	assert.Equal(t, "RequestError", err.Type)
+
+	// 500 err
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	mockhttp("GET", "/test", 500, nil, nil)
+
+	err = req.MakeRequest("GET", "/test", nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "InternalError", err.Type)
+
+	// String response
+	mockStringResponse("GET", "/test")
+
+	err = req.MakeRequest("GET", "/test", nil, &result)
+	assert.NotNil(t, err)
+	assert.Equal(t, "RequestError", err.Type)
+
+	// Error response
+	mockErrorResponse("GET", "/test")
+
+	err = req.MakeRequest("GET", "/test", nil, &result)
+	assert.NotNil(t, err)
+	assert.Equal(t, "RequestError", err.Type)
+
+	// Invalid URI
+	req = NewRequest(&common.AfterShipConf{
+		APIKey:   "YOUR_API_KEY",
+		Endpoint: "/this/field/is/illegal/and/should/error/",
+	}, nil)
+
+	err = req.MakeRequest("GET", "/test", nil, &result)
+	assert.NotNil(t, err)
+	assert.Equal(t, "RequestError", err.Type)
 }
 
 func TestRateLimit(t *testing.T) {
@@ -115,4 +151,17 @@ func mockhttp(method string, url string, status int, resp interface{}, headers m
 			return resp, nil
 		},
 	)
+}
+
+func mockStringResponse(method string, url string) {
+	httpmock.RegisterResponder(method, url,
+		func(req *http.Request) (*http.Response, error) {
+			resp := httpmock.NewStringResponse(200, "test")
+			return resp, nil
+		},
+	)
+}
+
+func mockErrorResponse(method string, url string) {
+	httpmock.RegisterResponder(method, url, httpmock.NewErrorResponder(errors.New("Error response")))
 }

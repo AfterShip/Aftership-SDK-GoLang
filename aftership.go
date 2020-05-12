@@ -18,7 +18,7 @@ type AfterShip struct {
 	Tracking       tracking.Endpoint     // The endpoint to create trackings, update trackings, and get tracking results.
 	LastCheckpoint checkpoint.Endpoint   // The endpoint to get tracking information of the last checkpoint of a tracking.
 	Notification   notification.Endpoint // The endpoint to get, add or remove contacts (sms or email) to be notified when the status of a tracking has changed.
-	RateLimit      *response.RateLimit
+	RateLimit      *response.RateLimit   // Gets the Rate Limit after API calls
 }
 
 // NewClient returns the AfterShip client

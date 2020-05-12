@@ -50,7 +50,7 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 	if data != nil {
 		jsonData, err := json.Marshal(data)
 		if err != nil {
-			return error.MakeRequestError("JsonError", err, data)
+			return error.NewRequestError("JsonError", err, data)
 		}
 
 		body = bytes.NewBuffer(jsonData)
@@ -58,7 +58,7 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 
 	req, err := http.NewRequest(method, impl.Endpoint+uri, body)
 	if err != nil {
-		return error.MakeRequestError("RequestError", err, data)
+		return error.NewRequestError("RequestError", err, data)
 	}
 
 	// Add headers
@@ -71,13 +71,13 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 	// Send request
 	resp, err := impl.Client.Do(req)
 	if err != nil {
-		return error.MakeRequestError("RequestError", err, data)
+		return error.NewRequestError("RequestError", err, data)
 	}
 
 	defer resp.Body.Close()
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return error.MakeRequestError("RequestError", err, data)
+		return error.NewRequestError("RequestError", err, data)
 	}
 
 	// Rate Limit
@@ -86,7 +86,7 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 	// Unmarshal response object
 	err = json.Unmarshal(contents, &result)
 	if err != nil {
-		return error.MakeRequestError("RequestError", err, string(contents))
+		return error.NewRequestError("RequestError", err, string(contents))
 	}
 
 	if resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices {

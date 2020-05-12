@@ -21,8 +21,8 @@ func MakeSdkError(errType string, msg string, data interface{}) *AfterShipError 
 	}
 }
 
-// MakeRequestError Make request error
-func MakeRequestError(errType string, reqError error, data interface{}) *AfterShipError {
+// NewRequestError Make request error
+func NewRequestError(errType string, reqError error, data interface{}) *AfterShipError {
 	return &AfterShipError{
 		Type:    errType,
 		Message: reqError.Error(),
