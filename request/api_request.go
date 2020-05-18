@@ -100,7 +100,7 @@ func (impl *APIRequestImpl) MakeRequest(ctx context.Context, method string, uri 
 		return nil
 	}
 
-	return error.MakeAPIError(result)
+	return error.NewAPIError(result)
 }
 
 func setRateLimit(rateLimit *response.RateLimit, resp *http.Response) {

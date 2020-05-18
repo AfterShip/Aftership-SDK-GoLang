@@ -24,11 +24,11 @@ type AfterShip struct {
 // NewClient returns the AfterShip client
 func NewClient(cfg *common.AfterShipConf) (*AfterShip, *error.AfterShipError) {
 	if cfg == nil {
-		return nil, error.MakeSdkError(error.ErrorTypeConstructorError, "ConstructorError: config is nil", "")
+		return nil, error.NewSdkError(error.ErrorTypeConstructorError, "ConstructorError: config is nil", "")
 	}
 
 	if cfg.APIKey == "" {
-		return nil, error.MakeSdkError(error.ErrorTypeConstructorError, "ConstructorError: Invalid API key", "")
+		return nil, error.NewSdkError(error.ErrorTypeConstructorError, "ConstructorError: Invalid API key", "")
 	}
 
 	if cfg.Endpoint == "" {

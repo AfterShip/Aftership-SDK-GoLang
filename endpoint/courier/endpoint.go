@@ -51,7 +51,7 @@ func (impl *EndpointImpl) GetAllCouriers(ctx context.Context) (List, *error.Afte
 // and selected couriers or a list of couriers.
 func (impl *EndpointImpl) DetectCouriers(ctx context.Context, req DetectCourierRequest) (DetectList, *error.AfterShipError) {
 	if req.Tracking.TrackingNumber == "" {
-		return DetectList{}, error.MakeSdkError(error.ErrorTypeHandlerError, "HandlerError: Invalid TrackingNumber", "")
+		return DetectList{}, error.NewSdkError(error.ErrorTypeHandlerError, "HandlerError: Invalid TrackingNumber", "")
 	}
 
 	var envelope DetectEnvelope

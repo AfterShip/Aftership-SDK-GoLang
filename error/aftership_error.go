@@ -12,8 +12,8 @@ type AfterShipError struct {
 	Data    interface{} `json:"data"`
 }
 
-// MakeSdkError Make SDK error
-func MakeSdkError(errType string, msg string, data interface{}) *AfterShipError {
+// NewSdkError Make SDK error
+func NewSdkError(errType string, msg string, data interface{}) *AfterShipError {
 	return &AfterShipError{
 		Type:    errType,
 		Message: msg,
@@ -30,8 +30,8 @@ func NewRequestError(errType string, reqError error, data interface{}) *AfterShi
 	}
 }
 
-// MakeAPIError Make API error
-func MakeAPIError(resp response.AftershipResponse) *AfterShipError {
+// NewAPIError Make API error
+func NewAPIError(resp response.AftershipResponse) *AfterShipError {
 	if resp == nil {
 		return &AfterShipError{
 			Type: "InternalError",

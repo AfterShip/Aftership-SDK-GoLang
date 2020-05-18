@@ -26,6 +26,9 @@ type Endpoint interface {
 
 	// ReTrack an expired tracking once. Max. 3 times per tracking.
 	ReTrack(ctx context.Context, param SingleTrackingParam) (SingleTrackingData, *error.AfterShipError)
+
+	// MarkAsCompleted marks a tracking as completed. The tracking won't auto update until retrack it.
+	MarkAsCompleted(ctx context.Context, param SingleTrackingParam, reason MarkTrackingAsCompletedRequest) (SingleTrackingData, *error.AfterShipError)
 }
 
 // EndpointImpl is the implementaion of tracking endpoint
@@ -109,5 +112,21 @@ func (impl *EndpointImpl) ReTrack(ctx context.Context, param SingleTrackingParam
 
 	var envelope SingleTrackingEnvelope
 	err = impl.request.MakeRequest(ctx, "POST", url, nil, &envelope)
+	return envelope.Data, err
+}
+
+// MarkAsCompleted marks a tracking as completed. The tracking won't auto update until retrack it.
+func (impl *EndpointImpl) MarkAsCompleted(ctx context.Context, param SingleTrackingParam, reason MarkTrackingAsCompletedRequest) (SingleTrackingData, *error.AfterShipError) {
+	url, err := param.BuildTrackingURL("trackings", "mark-as-completed")
+	if err != nil {
+		return SingleTrackingData{}, err
+	}
+
+	if reason.Reason != "DELIVERED" && reason.Reason != "LOST" && reason.Reason != "RETURNED_TO_SENDER" {
+		return SingleTrackingData{}, error.NewSdkError(error.ErrorTypeHandlerError, `Reason must be Ooe of "DELIVERED", "LOST" or "RETURNED_TO_SENDER"`, param)
+	}
+
+	var envelope SingleTrackingEnvelope
+	err = impl.request.MakeRequest(ctx, "POST", url, reason, &envelope)
 	return envelope.Data, err
 }

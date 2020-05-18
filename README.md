@@ -537,6 +537,28 @@ if err != nil {
 fmt.Println(result)
 ```
 
+**POST** /trackings/:slug/:tracking_number/mark-as-completed
+> Mark a tracking as completed. The tracking won't auto update until retrack it.
+
+```go
+param := tracking.SingleTrackingParam{
+    Slug:           "dhl",
+    TrackingNumber: "1588226550",
+}
+
+reason := tracking.MarkTrackingAsCompletedRequest{
+    Reason: "DELIVERED",
+}
+
+result, err := client.Tracking.MarkAsCompleted(context.Background(), param, reason)
+if err != nil {
+    fmt.Println(err)
+    return
+}
+
+fmt.Println(result)
+```
+
 ### /last_checkpoint
 
 > Get tracking information of the last checkpoint of a tracking.

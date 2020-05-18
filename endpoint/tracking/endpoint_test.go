@@ -472,6 +472,103 @@ func TestReTrackError(t *testing.T) {
 	assert.Equal(t, "Unauthorized", err.Type)
 }
 
+func TestMarkAsCompleted(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	p := SingleTrackingParam{
+		Slug:           "ups",
+		TrackingNumber: "1Z9999999999999998",
+	}
+
+	exp := SingleTrackingData{
+		Tracking: Tracking{
+			Slug:  "ups",
+			Title: "Title Name",
+		},
+	}
+
+	r := MarkTrackingAsCompletedRequest{
+		Reason: "LOST",
+	}
+
+	mockhttp("POST", fmt.Sprintf("/trackings/%s/%s/mark-as-completed", p.Slug, p.TrackingNumber), 200, SingleTrackingEnvelope{
+		response.Meta{
+			Code:    200,
+			Message: "",
+			Type:    "",
+		},
+		exp,
+	}, nil)
+
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEndpoint(req)
+	res, _ := endpoint.MarkAsCompleted(context.Background(), p, r)
+	assert.Equal(t, exp, res)
+}
+
+func TestMarkAsCompletedError(t *testing.T) {
+	req := request.NewRequest(&common.AfterShipConf{
+		APIKey: "YOUR_API_KEY",
+	}, nil)
+	endpoint := NewEndpoint(req)
+
+	// empty id, slug and tracking_number
+	p := SingleTrackingParam{
+		ID:             "",
+		Slug:           "",
+		TrackingNumber: "",
+		OptionalParams: nil,
+	}
+
+	r := MarkTrackingAsCompletedRequest{
+		Reason: "LOST",
+	}
+
+	_, err := endpoint.MarkAsCompleted(context.Background(), p, r)
+	assert.NotNil(t, err)
+	assert.Equal(t, "HandlerError", err.Type)
+
+	// Wrong reason
+	p = SingleTrackingParam{
+		ID:             "",
+		Slug:           "xq-express",
+		TrackingNumber: "LS404494276CN",
+		OptionalParams: nil,
+	}
+
+	r = MarkTrackingAsCompletedRequest{
+		Reason: "Wrong reason",
+	}
+
+	_, err = endpoint.MarkAsCompleted(context.Background(), p, r)
+	assert.NotNil(t, err)
+	assert.Equal(t, "HandlerError", err.Type)
+
+	// Response with error
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	r = MarkTrackingAsCompletedRequest{
+		Reason: "DELIVERED",
+	}
+
+	mockhttp("POST", fmt.Sprintf("/trackings/%s/%s/mark-as-completed", p.Slug, p.TrackingNumber), 401, SingleTrackingEnvelope{
+		response.Meta{
+			Code:    401,
+			Message: "Invalid API key.",
+			Type:    "Unauthorized",
+		},
+		SingleTrackingData{},
+	}, nil)
+
+	_, err = endpoint.MarkAsCompleted(context.Background(), p, r)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized", err.Type)
+}
+
 func mockhttp(method string, url string, status int, resp interface{}, headers map[string]string) {
 	httpmock.RegisterResponder(method, url,
 		func(req *http.Request) (*http.Response, error) {

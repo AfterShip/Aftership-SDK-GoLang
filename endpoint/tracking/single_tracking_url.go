@@ -41,7 +41,7 @@ func (param *SingleTrackingParam) BuildTrackingURL(path string, subPath string) 
 	} else if param.Slug != "" && param.TrackingNumber != "" {
 		trackingURL = fmt.Sprintf("/%s/%s/%s", path, url.QueryEscape(param.Slug), url.QueryEscape(param.TrackingNumber))
 	} else {
-		return "", error.MakeSdkError(error.ErrorTypeHandlerError, "You must specify the id or slug and tracking number", param)
+		return "", error.NewSdkError(error.ErrorTypeHandlerError, "You must specify the id or slug and tracking number", param)
 	}
 
 	if subPath != "" {
@@ -67,7 +67,7 @@ func BuildURLWithQueryString(uri string, params interface{}) (string, *error.Aft
 
 	queryStringObj, err := query.Values(params)
 	if err != nil {
-		return "", error.MakeSdkError(error.ErrorTypeHandlerError, err.Error(), params)
+		return "", error.NewSdkError(error.ErrorTypeHandlerError, err.Error(), params)
 	}
 
 	queryString := queryStringObj.Encode()

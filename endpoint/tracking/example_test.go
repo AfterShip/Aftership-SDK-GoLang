@@ -200,3 +200,30 @@ func ExampleEndpoint_ReTrack() {
 		fmt.Println(result)
 	}
 }
+
+func ExampleEndpoint_MarkAsCompleted() {
+	client, err := aftership.NewClient(&common.AfterShipConf{
+		APIKey: "d655b36a-d268-4eb3-a0d6-8939c79da93e",
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	param := tracking.SingleTrackingParam{
+		Slug:           "USPS",
+		TrackingNumber: "1587721393824",
+	}
+
+	reason := tracking.MarkTrackingAsCompletedRequest{
+		Reason: "DELIVERED",
+	}
+
+	result, err := client.Tracking.MarkAsCompleted(context.Background(), param, reason)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(result)
+	}
+}
