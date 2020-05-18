@@ -28,7 +28,7 @@ type Endpoint interface {
 	ReTrack(ctx context.Context, param SingleTrackingParam) (SingleTrackingData, *error.AfterShipError)
 
 	// MarkAsCompleted marks a tracking as completed. The tracking won't auto update until retrack it.
-	MarkAsCompleted(ctx context.Context, param SingleTrackingParam, reason MarkTrackingAsCompletedRequest) (SingleTrackingData, *error.AfterShipError)
+	MarkAsCompleted(ctx context.Context, param SingleTrackingParam, reason MarkAsCompletedRequest) (SingleTrackingData, *error.AfterShipError)
 }
 
 // EndpointImpl is the implementaion of tracking endpoint
@@ -116,7 +116,7 @@ func (impl *EndpointImpl) ReTrack(ctx context.Context, param SingleTrackingParam
 }
 
 // MarkAsCompleted marks a tracking as completed. The tracking won't auto update until retrack it.
-func (impl *EndpointImpl) MarkAsCompleted(ctx context.Context, param SingleTrackingParam, reason MarkTrackingAsCompletedRequest) (SingleTrackingData, *error.AfterShipError) {
+func (impl *EndpointImpl) MarkAsCompleted(ctx context.Context, param SingleTrackingParam, reason MarkAsCompletedRequest) (SingleTrackingData, *error.AfterShipError) {
 	url, err := param.BuildTrackingURL("trackings", "mark-as-completed")
 	if err != nil {
 		return SingleTrackingData{}, err

@@ -546,7 +546,7 @@ param := tracking.SingleTrackingParam{
     TrackingNumber: "1588226550",
 }
 
-reason := tracking.MarkTrackingAsCompletedRequest{
+reason := tracking.MarkAsCompletedRequest{
     Reason: "DELIVERED",
 }
 

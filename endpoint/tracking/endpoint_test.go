@@ -488,7 +488,7 @@ func TestMarkAsCompleted(t *testing.T) {
 		},
 	}
 
-	r := MarkTrackingAsCompletedRequest{
+	r := MarkAsCompletedRequest{
 		Reason: "LOST",
 	}
 
@@ -523,7 +523,7 @@ func TestMarkAsCompletedError(t *testing.T) {
 		OptionalParams: nil,
 	}
 
-	r := MarkTrackingAsCompletedRequest{
+	r := MarkAsCompletedRequest{
 		Reason: "LOST",
 	}
 
@@ -539,7 +539,7 @@ func TestMarkAsCompletedError(t *testing.T) {
 		OptionalParams: nil,
 	}
 
-	r = MarkTrackingAsCompletedRequest{
+	r = MarkAsCompletedRequest{
 		Reason: "Wrong reason",
 	}
 
@@ -551,7 +551,7 @@ func TestMarkAsCompletedError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	r = MarkTrackingAsCompletedRequest{
+	r = MarkAsCompletedRequest{
 		Reason: "DELIVERED",
 	}
 

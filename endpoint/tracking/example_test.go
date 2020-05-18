@@ -203,7 +203,7 @@ func ExampleEndpoint_ReTrack() {
 
 func ExampleEndpoint_MarkAsCompleted() {
 	client, err := aftership.NewClient(&common.AfterShipConf{
-		APIKey: "d655b36a-d268-4eb3-a0d6-8939c79da93e",
+		APIKey: "YOUR_API_KEY",
 	})
 
 	if err != nil {
@@ -216,7 +216,7 @@ func ExampleEndpoint_MarkAsCompleted() {
 		TrackingNumber: "1587721393824",
 	}
 
-	reason := tracking.MarkTrackingAsCompletedRequest{
+	reason := tracking.MarkAsCompletedRequest{
 		Reason: "DELIVERED",
 	}
 

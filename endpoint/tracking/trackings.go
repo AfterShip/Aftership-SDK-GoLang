@@ -143,8 +143,8 @@ type UpdateTrackingRequest struct {
 	Tracking UpdateTracking `json:"tracking"`
 }
 
-// MarkTrackingAsCompletedRequest is a model for update tracking as completed API request
-type MarkTrackingAsCompletedRequest struct {
+// MarkAsCompletedRequest is a model for update tracking as completed API request
+type MarkAsCompletedRequest struct {
 	Reason string `json:"reason"` // One of "DELIVERED", "LOST" or "RETURNED_TO_SENDER".
 }
 
