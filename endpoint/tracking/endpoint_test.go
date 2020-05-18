@@ -1,6 +1,7 @@
 package tracking
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -52,7 +53,7 @@ func TestCreateTracking(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.CreateTracking(data)
+	res, _ := endpoint.CreateTracking(context.Background(), data)
 	assert.Equal(t, exp, res)
 }
 
@@ -81,7 +82,7 @@ func TestCreateTrackingError(t *testing.T) {
 		SingleTrackingData{},
 	}, nil)
 
-	_, err := endpoint.CreateTracking(data)
+	_, err := endpoint.CreateTracking(context.Background(), data)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }
@@ -90,7 +91,7 @@ func TestDeleteTracking(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		Slug:           "ups",
 		TrackingNumber: "1Z9999999999999998",
 	}
@@ -115,7 +116,7 @@ func TestDeleteTracking(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.DeleteTracking(p)
+	res, _ := endpoint.DeleteTracking(context.Background(), p)
 	assert.Equal(t, exp, res)
 }
 
@@ -126,14 +127,14 @@ func TestDeleteTrackingError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
 		OptionalParams: nil,
 	}
 
-	_, err := endpoint.DeleteTracking(p)
+	_, err := endpoint.DeleteTracking(context.Background(), p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -141,7 +142,7 @@ func TestDeleteTrackingError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -157,7 +158,7 @@ func TestDeleteTrackingError(t *testing.T) {
 		SingleTrackingData{},
 	}, nil)
 
-	_, err = endpoint.DeleteTracking(p)
+	_, err = endpoint.DeleteTracking(context.Background(), p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }
@@ -200,7 +201,7 @@ func TestGetTrackings(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.GetTrackings(p)
+	res, _ := endpoint.GetTrackings(context.Background(), p)
 	assert.Equal(t, exp, res)
 }
 
@@ -226,7 +227,7 @@ func TestGetTrackingsError(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	_, err := endpoint.GetTrackings(p)
+	_, err := endpoint.GetTrackings(context.Background(), p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }
@@ -235,7 +236,7 @@ func TestGetTracking(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		Slug:           "ups",
 		TrackingNumber: "1Z9999999999999998",
 	}
@@ -260,7 +261,7 @@ func TestGetTracking(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.GetTracking(p, nil)
+	res, _ := endpoint.GetTracking(context.Background(), p, nil)
 	assert.Equal(t, exp, res)
 }
 
@@ -271,14 +272,14 @@ func TestGetTrackingError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
 		OptionalParams: nil,
 	}
 
-	_, err := endpoint.GetTracking(p, nil)
+	_, err := endpoint.GetTracking(context.Background(), p, nil)
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -286,7 +287,7 @@ func TestGetTrackingError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -302,7 +303,7 @@ func TestGetTrackingError(t *testing.T) {
 		SingleTrackingData{},
 	}, nil)
 
-	_, err = endpoint.GetTracking(p, nil)
+	_, err = endpoint.GetTracking(context.Background(), p, nil)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }
@@ -311,7 +312,7 @@ func TestUpdateTracking(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		Slug:           "ups",
 		TrackingNumber: "1Z9999999999999998",
 	}
@@ -342,7 +343,7 @@ func TestUpdateTracking(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.UpdateTracking(p, data)
+	res, _ := endpoint.UpdateTracking(context.Background(), p, data)
 	assert.Equal(t, exp, res)
 }
 
@@ -353,7 +354,7 @@ func TestUpdateTrackingError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
@@ -366,7 +367,7 @@ func TestUpdateTrackingError(t *testing.T) {
 		},
 	}
 
-	_, err := endpoint.UpdateTracking(p, data)
+	_, err := endpoint.UpdateTracking(context.Background(), p, data)
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -374,7 +375,7 @@ func TestUpdateTrackingError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -390,7 +391,7 @@ func TestUpdateTrackingError(t *testing.T) {
 		SingleTrackingData{},
 	}, nil)
 
-	_, err = endpoint.UpdateTracking(p, data)
+	_, err = endpoint.UpdateTracking(context.Background(), p, data)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }
@@ -399,7 +400,7 @@ func TestReTrack(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		Slug:           "ups",
 		TrackingNumber: "1Z9999999999999998",
 	}
@@ -424,7 +425,7 @@ func TestReTrack(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.ReTrack(p)
+	res, _ := endpoint.ReTrack(context.Background(), p)
 	assert.Equal(t, exp, res)
 }
 
@@ -435,14 +436,14 @@ func TestReTrackError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
 		OptionalParams: nil,
 	}
 
-	_, err := endpoint.ReTrack(p)
+	_, err := endpoint.ReTrack(context.Background(), p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -450,7 +451,7 @@ func TestReTrackError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -466,7 +467,7 @@ func TestReTrackError(t *testing.T) {
 		SingleTrackingData{},
 	}, nil)
 
-	_, err = endpoint.ReTrack(p)
+	_, err = endpoint.ReTrack(context.Background(), p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }

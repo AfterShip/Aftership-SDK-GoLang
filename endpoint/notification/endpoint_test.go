@@ -1,11 +1,13 @@
 package notification
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 
 	"github.com/aftership/aftership-sdk-go/v2/common"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/tracking"
 	"github.com/aftership/aftership-sdk-go/v2/request"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 	"github.com/jarcoal/httpmock"
@@ -16,7 +18,7 @@ func TestAddNotification(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -42,7 +44,7 @@ func TestAddNotification(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.AddNotification(p, exp)
+	res, _ := endpoint.AddNotification(context.Background(), p, exp)
 	assert.Equal(t, exp, res)
 }
 
@@ -53,14 +55,14 @@ func TestAddNotificationError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
 		OptionalParams: nil,
 	}
 
-	_, err := endpoint.AddNotification(p, Data{})
+	_, err := endpoint.AddNotification(context.Background(), p, Data{})
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -68,7 +70,7 @@ func TestAddNotificationError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -84,7 +86,7 @@ func TestAddNotificationError(t *testing.T) {
 		Data{},
 	}, nil)
 
-	_, err = endpoint.AddNotification(p, Data{})
+	_, err = endpoint.AddNotification(context.Background(), p, Data{})
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }
@@ -93,7 +95,7 @@ func TestRemoveNotification(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -119,7 +121,7 @@ func TestRemoveNotification(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.RemoveNotification(p, exp)
+	res, _ := endpoint.RemoveNotification(context.Background(), p, exp)
 	assert.Equal(t, exp, res)
 }
 
@@ -130,14 +132,14 @@ func TestRemoveNotificationError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
 		OptionalParams: nil,
 	}
 
-	_, err := endpoint.RemoveNotification(p, Data{})
+	_, err := endpoint.RemoveNotification(context.Background(), p, Data{})
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -145,7 +147,7 @@ func TestRemoveNotificationError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -161,7 +163,7 @@ func TestRemoveNotificationError(t *testing.T) {
 		Data{},
 	}, nil)
 
-	_, err = endpoint.RemoveNotification(p, Data{})
+	_, err = endpoint.RemoveNotification(context.Background(), p, Data{})
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }
@@ -170,7 +172,7 @@ func TestGetNotificationSetting(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -196,7 +198,7 @@ func TestGetNotificationSetting(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.GetNotification(p)
+	res, _ := endpoint.GetNotification(context.Background(), p)
 	assert.Equal(t, exp, res)
 }
 
@@ -207,14 +209,14 @@ func TestGetotificationError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
 		OptionalParams: nil,
 	}
 
-	_, err := endpoint.GetNotification(p)
+	_, err := endpoint.GetNotification(context.Background(), p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -222,7 +224,7 @@ func TestGetotificationError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
@@ -238,7 +240,7 @@ func TestGetotificationError(t *testing.T) {
 		Data{},
 	}, nil)
 
-	_, err = endpoint.GetNotification(p)
+	_, err = endpoint.GetNotification(context.Background(), p)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }

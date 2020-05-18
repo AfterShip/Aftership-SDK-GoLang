@@ -1,6 +1,7 @@
 package courier
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -37,7 +38,7 @@ func TestGetCouriers(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, err := endpoint.GetCouriers()
+	res, err := endpoint.GetCouriers(context.Background())
 	assert.Equal(t, exp, res)
 	assert.Nil(t, err)
 }
@@ -59,7 +60,7 @@ func TestGetCouriersError(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	_, err := endpoint.GetCouriers()
+	_, err := endpoint.GetCouriers(context.Background())
 	assert.NotNil(t, err)
 	assert.Equal(t, "TooManyRequests", err.Type)
 }
@@ -98,7 +99,7 @@ func TestGetAllCouriers(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, _ := endpoint.GetAllCouriers()
+	res, _ := endpoint.GetAllCouriers(context.Background())
 	assert.Equal(t, exp, res)
 }
 
@@ -119,7 +120,7 @@ func TestGetAllCouriersError(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	_, err := endpoint.GetAllCouriers()
+	_, err := endpoint.GetAllCouriers(context.Background())
 	assert.NotNil(t, err)
 	assert.Equal(t, "TooManyRequests", err.Type)
 }
@@ -150,7 +151,7 @@ func TestDetectCouriers(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	result, _ := endpoint.DetectCouriers(DetectCourierRequest{
+	result, _ := endpoint.DetectCouriers(context.Background(), DetectCourierRequest{
 		Tracking: DetectParam{
 			"906587618687",
 			"DA15BU",
@@ -169,7 +170,7 @@ func TestInvalidDetectCouriers(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	_, err := endpoint.DetectCouriers(DetectCourierRequest{})
+	_, err := endpoint.DetectCouriers(context.Background(), DetectCourierRequest{})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError: Invalid TrackingNumber", err.Message)
@@ -190,7 +191,7 @@ func TestDetectCouriersError(t *testing.T) {
 
 	req := request.NewRequest(&common.AfterShipConf{}, nil)
 	endpoint := NewEndpoint(req)
-	_, err := endpoint.DetectCouriers(DetectCourierRequest{
+	_, err := endpoint.DetectCouriers(context.Background(), DetectCourierRequest{
 		Tracking: DetectParam{
 			TrackingNumber: "906587618687",
 		},

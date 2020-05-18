@@ -1,6 +1,7 @@
 package courier_test
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/aftership/aftership-sdk-go/v2"
@@ -19,7 +20,7 @@ func ExampleEndpoint_GetCouriers() {
 	}
 
 	// Get couriers
-	result, err := client.Courier.GetCouriers()
+	result, err := client.Courier.GetCouriers(context.Background())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -39,7 +40,7 @@ func ExampleEndpoint_GetAllCouriers() {
 	}
 
 	// Get all couriers
-	result, err := client.Courier.GetAllCouriers()
+	result, err := client.Courier.GetAllCouriers(context.Background())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -65,7 +66,7 @@ func ExampleEndpoint_DetectCouriers() {
 		},
 	}
 
-	list, err := client.Courier.DetectCouriers(req)
+	list, err := client.Courier.DetectCouriers(context.Background(), req)
 	if err != nil {
 		fmt.Println(err)
 		return

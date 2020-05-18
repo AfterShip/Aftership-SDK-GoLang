@@ -33,6 +33,7 @@ import "github.com/aftership/aftership-sdk-go/v2"
 package main
 
 import (
+        "context"
         "fmt"
 
         "github.com/aftership/aftership-sdk-go/v2"
@@ -51,7 +52,7 @@ func main() {
         }
 
         // Get couriers
-        result, err := client.Courier.GetCouriers()
+        result, err := client.Courier.GetCouriers(context.Background())
         if err != nil {
                 fmt.Println(err)
                 return
@@ -115,12 +116,12 @@ Make request in a specific endpoint
 
 ```go
 // GET /trackings/:slug/:tracking_number
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
 
-result, err := client.Tracking.GetTracking(param, nil)
+result, err := client.Tracking.GetTracking(context.Background(), param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -137,6 +138,7 @@ You can get the recent rate limit by `client.RateLimit`. Initially all value are
 
 ```go
 import (
+    "context"
     "fmt"
 
     "github.com/aftership/aftership-sdk-go/v2"
@@ -164,7 +166,7 @@ func main() {
     */
 
     // Get couriers
-    result, err := client.Courier.GetCouriers()
+    result, err := client.Courier.GetCouriers(context.Background())
     if err != nil {
         fmt.Println(err)
     } else {
@@ -236,11 +238,11 @@ client, err := aftership.NewClient(&common.AfterShipConf{
 })
 
 // Get notification
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug: "dhl",
 }
 
-result, err := client.Notification.GetNotification(param)
+result, err := client.Notification.GetNotification(context.Background(), param)
 if err != nil {
     fmt.Println(err)
     return
@@ -270,7 +272,7 @@ client, err := aftership.NewClient(&common.AfterShipConf{
 })
 
 // Get couriers
-result, err := client.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers(context.Background())
 if err != nil {
     fmt.Println(err)
     return
@@ -297,7 +299,7 @@ client, err := aftership.NewClient(&common.AfterShipConf{
 })
 
 // Get couriers
-result, err := client.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers(context.Background())
 if err != nil {
     fmt.Println(err)
     return
@@ -324,7 +326,7 @@ fmt.Println(result)
 > Return a list of couriers activated at your AfterShip account.
 
 ```go
-result, err := client.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers(context.Background())
 if err != nil {
     fmt.Println(err)
     return
@@ -337,7 +339,7 @@ fmt.Println(result)
 > Return a list of all couriers.
 
 ```go
-result, err := client.Courier.GetAllCouriers()
+result, err := client.Courier.GetAllCouriers(context.Background())
 if err != nil {
     fmt.Println(err)
     return
@@ -356,7 +358,7 @@ req := courier.DetectCourierRequest{
     },
 }
 
-result, err := client.Courier.DetectCouriers(req)
+result, err := client.Courier.DetectCouriers(context.Background(), req)
 if err != nil {
     fmt.Println(err)
     return
@@ -399,7 +401,7 @@ newTracking := tracking.NewTrackingRequest{
     },
 }
 
-result, err := client.Tracking.CreateTracking(newTracking)
+result, err := client.Tracking.CreateTracking(context.Background(), newTracking)
 if err != nil {
     fmt.Println(err)
     return
@@ -412,12 +414,12 @@ fmt.Println(result)
 > Delete a tracking.
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
    Slug:           "dhl",
    TrackingNumber: "1234567890",
 }
 
-result, err := client.Tracking.DeleteTracking(param)
+result, err := client.Tracking.DeleteTracking(context.Background(), param)
 if err != nil {
     fmt.Println(err)
     return
@@ -435,7 +437,7 @@ multiParams := tracking.MultiTrackingsParams{
     Limit: 10,
 }
 
-result, err := client.Tracking.GetTrackings(multiParams)
+result, err := client.Tracking.GetTrackings(context.Background(), multiParams)
 if err != nil {
     fmt.Println(err)
     return
@@ -448,12 +450,12 @@ fmt.Println(result)
 > Get tracking results of a single tracking.
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
 
-result, err := client.Tracking.GetTracking(param, nil)
+result, err := client.Tracking.GetTracking(context.Background(), param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -466,7 +468,7 @@ Tip: You can also add `OptionalParams` to `/:slug/:tracking_number`
 
 ```go
 // GET /trackings/:slug/:tracking_number?tracking_postal_code=:postal_code&tracking_ship_date=:ship_date
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
     OptionalParams: &common.SingleTrackingOptionalParams{
@@ -480,11 +482,11 @@ param := common.SingleTrackingParam{
 
 ```go
 // GET /trackings/:id
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     ID: "1234567890",
 }
 
-result, err := client.Tracking.GetTracking(param, nil)
+result, err := client.Tracking.GetTracking(context.Background(), param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -497,7 +499,7 @@ fmt.Println(result)
 > Update a tracking.
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
@@ -508,7 +510,7 @@ updateReq := tracking.UpdateTrackingRequest{
     },
 }
 
-result, err := client.Tracking.UpdateTracking(param, updateReq)
+result, err := client.Tracking.UpdateTracking(context.Background(), param, updateReq)
 if err != nil {
     fmt.Println(err)
     return
@@ -521,12 +523,12 @@ fmt.Println(result)
 > Retrack an expired tracking. Max 3 times per tracking.
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
 
-result, err := client.Tracking.ReTrack(param)
+result, err := client.Tracking.ReTrack(context.Background(), param)
 if err != nil {
     fmt.Println(err)
     return
@@ -543,12 +545,12 @@ fmt.Println(result)
 > Return the tracking information of the last checkpoint of a single tracking.
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "ups",
     TrackingNumber: "1234567890",
 }
 
-result, err := client.LastCheckpoint.GetLastCheckpoint(param, nil)
+result, err := client.LastCheckpoint.GetLastCheckpoint(context.Background(), param, nil)
 if err != nil {
     fmt.Println(err)
     return
@@ -565,12 +567,12 @@ fmt.Println(result)
 > Get contact information for the users to notify when the tracking changes. 
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
 
-result, err := client.Notification.GetNotification(param)
+result, err := client.Notification.GetNotification(context.Background(), param)
 if err != nil {
     fmt.Println(err)
     return
@@ -583,7 +585,7 @@ fmt.Println(result)
 > Add notification receivers to a tracking number.
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
@@ -595,7 +597,7 @@ data := notification.Data{
     },
 }
 
-result, err := client.Notification.AddNotification(param, data)
+result, err := client.Notification.AddNotification(context.Background(), param, data)
 if err != nil {
     fmt.Println(err)
     return
@@ -608,7 +610,7 @@ fmt.Println(result)
 > Remove notification receivers from a tracking number.
 
 ```go
-param := common.SingleTrackingParam{
+param := tracking.SingleTrackingParam{
     Slug:           "dhl",
     TrackingNumber: "1588226550",
 }
@@ -620,7 +622,7 @@ data := notification.Data{
     },
 }
 
-result, err := client.Notification.RemoveNotification(param, data)
+result, err := client.Notification.RemoveNotification(context.Background(), param, data)
 if err != nil {
     fmt.Println(err)
     return
@@ -648,7 +650,7 @@ client, err := aftership.NewClient(&common.AfterShipConf{
     APIKey: "YOUR_API_KEY",
 })
 
-result, err := client.Courier.GetCouriers()
+result, err := client.Courier.GetCouriers(context.Background())
 if err != nil {
     fmt.Println(err)
     return

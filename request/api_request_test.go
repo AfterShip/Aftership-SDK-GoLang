@@ -1,6 +1,7 @@
 package request
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"testing"
@@ -36,21 +37,21 @@ func TestMakeRequest(t *testing.T) {
 	}, nil)
 
 	var result mockData
-	err := req.MakeRequest("GET", "/test", nil, &result)
+	err := req.MakeRequest(context.Background(), "GET", "/test", nil, &result)
 	assert.Nil(t, err)
 	assert.Equal(t, exp, result)
 
 	// POST with status 201
 	mockhttp("POST", "/test", 201, exp, nil)
 
-	err = req.MakeRequest("POST", "/test", nil, &result)
+	err = req.MakeRequest(context.Background(), "POST", "/test", nil, &result)
 	assert.Nil(t, err)
 	assert.Equal(t, exp, result)
 
 	// PUT with status 200
 	mockhttp("POST", "/test", 200, exp, nil)
 
-	err = req.MakeRequest("POST", "/test", exp, &result)
+	err = req.MakeRequest(context.Background(), "POST", "/test", exp, &result)
 	assert.Nil(t, err)
 	assert.Equal(t, exp, result)
 }
@@ -62,12 +63,12 @@ func TestNewRequestError(t *testing.T) {
 
 	var result mockData
 	// Invalid data
-	err := req.MakeRequest("GET", "/test", make(chan int), &result)
+	err := req.MakeRequest(context.Background(), "GET", "/test", make(chan int), &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "JsonError", err.Type)
 
 	// Bad method
-	err = req.MakeRequest("bad method", "/test", nil, &result)
+	err = req.MakeRequest(context.Background(), "bad method", "/test", nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "RequestError", err.Type)
 
@@ -77,21 +78,21 @@ func TestNewRequestError(t *testing.T) {
 
 	mockhttp("GET", "/test", 500, nil, nil)
 
-	err = req.MakeRequest("GET", "/test", nil, &result)
+	err = req.MakeRequest(context.Background(), "GET", "/test", nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "InternalError", err.Type)
 
 	// String response
 	mockStringResponse("GET", "/test")
 
-	err = req.MakeRequest("GET", "/test", nil, &result)
+	err = req.MakeRequest(context.Background(), "GET", "/test", nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "RequestError", err.Type)
 
 	// Error response
 	mockErrorResponse("GET", "/test")
 
-	err = req.MakeRequest("GET", "/test", nil, &result)
+	err = req.MakeRequest(context.Background(), "GET", "/test", nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "RequestError", err.Type)
 
@@ -101,7 +102,7 @@ func TestNewRequestError(t *testing.T) {
 		Endpoint: "/this/field/is/illegal/and/should/error/",
 	}, nil)
 
-	err = req.MakeRequest("GET", "/test", nil, &result)
+	err = req.MakeRequest(context.Background(), "GET", "/test", nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "RequestError", err.Type)
 }
@@ -130,7 +131,7 @@ func TestRateLimit(t *testing.T) {
 	}, rateLimit)
 
 	var result mockData
-	err := req.MakeRequest("GET", "/test", nil, &result)
+	err := req.MakeRequest(context.Background(), "GET", "/test", nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, "TooManyRequests", err.Type)
 	assert.Equal(t, int64(1458463600), rateLimit.Reset)

@@ -1,10 +1,12 @@
 package checkpoint_test
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/aftership/aftership-sdk-go/v2"
 	"github.com/aftership/aftership-sdk-go/v2/common"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/tracking"
 )
 
 func Example_getLastCheckpoint() {
@@ -18,12 +20,12 @@ func Example_getLastCheckpoint() {
 	}
 
 	// Get last checkpopint
-	param := common.SingleTrackingParam{
+	param := tracking.SingleTrackingParam{
 		Slug:           "ups",
 		TrackingNumber: "1234567890",
 	}
 
-	result, err := client.LastCheckpoint.GetLastCheckpoint(param, nil)
+	result, err := client.LastCheckpoint.GetLastCheckpoint(context.Background(), param, nil)
 
 	if err != nil {
 		fmt.Println(err)

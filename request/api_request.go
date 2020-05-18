@@ -2,6 +2,7 @@ package request
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -18,7 +19,7 @@ import (
 // APIRequest is the API request interface
 type APIRequest interface {
 	// MakeRequest makes a AfterShip API calls
-	MakeRequest(method string, uri string, data interface{}, result response.AftershipResponse) *error.AfterShipError
+	MakeRequest(ctx context.Context, method string, uri string, data interface{}, result response.AftershipResponse) *error.AfterShipError
 }
 
 // APIRequestImpl is the implementation of API Request
@@ -41,7 +42,7 @@ func NewRequest(cfg *common.AfterShipConf, limit *response.RateLimit) APIRequest
 }
 
 // MakeRequest makes a AfterShip API calls
-func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interface{}, result response.AftershipResponse) *error.AfterShipError {
+func (impl *APIRequestImpl) MakeRequest(ctx context.Context, method string, uri string, data interface{}, result response.AftershipResponse) *error.AfterShipError {
 	if impl.Client == nil {
 		impl.Client = &http.Client{}
 	}
@@ -67,6 +68,11 @@ func (impl *APIRequestImpl) MakeRequest(method string, uri string, data interfac
 	req.Header.Add("request-id", uuid.New().String())
 	req.Header.Add("User-Agent", fmt.Sprintf("%s/%s", impl.UserAagentPrefix, common.VERSION))
 	req.Header.Add("aftership-agent", fmt.Sprintf("go-sdk-%s", common.VERSION))
+
+	// ctx
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
 
 	// Send request
 	resp, err := impl.Client.Do(req)

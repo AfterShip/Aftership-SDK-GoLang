@@ -1,11 +1,13 @@
 package checkpoint
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 
 	"github.com/aftership/aftership-sdk-go/v2/common"
+	"github.com/aftership/aftership-sdk-go/v2/endpoint/tracking"
 	"github.com/aftership/aftership-sdk-go/v2/request"
 	"github.com/aftership/aftership-sdk-go/v2/response"
 	"github.com/jarcoal/httpmock"
@@ -16,14 +18,14 @@ func TestGetLastCheckpoint(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
 	}
 	exp := LastCheckpoint{
 		ID:             "5b74f4958776db0e00b6f5ed",
 		TrackingNumber: "111111111111",
-		Checkpoint: Checkpoint{
+		Checkpoint: tracking.Checkpoint{
 			Slug: "slug",
 		},
 	}
@@ -40,7 +42,7 @@ func TestGetLastCheckpoint(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, err := endpoint.GetLastCheckpoint(p, nil)
+	res, err := endpoint.GetLastCheckpoint(context.Background(), p, nil)
 	assert.Equal(t, exp, res)
 	assert.Nil(t, err)
 }
@@ -49,7 +51,7 @@ func TestGetLastCheckpointWithOptionalParams(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
 	}
@@ -62,7 +64,7 @@ func TestGetLastCheckpointWithOptionalParams(t *testing.T) {
 	exp := LastCheckpoint{
 		ID:             "5b74f4958776db0e00b6f5ed",
 		TrackingNumber: "111111111111",
-		Checkpoint: Checkpoint{
+		Checkpoint: tracking.Checkpoint{
 			Slug: "slug",
 		},
 	}
@@ -79,7 +81,7 @@ func TestGetLastCheckpointWithOptionalParams(t *testing.T) {
 		APIKey: "YOUR_API_KEY",
 	}, nil)
 	endpoint := NewEndpoint(req)
-	res, err := endpoint.GetLastCheckpoint(p, op)
+	res, err := endpoint.GetLastCheckpoint(context.Background(), p, op)
 	assert.Equal(t, exp, res)
 	assert.Nil(t, err)
 }
@@ -89,14 +91,14 @@ func TestError(t *testing.T) {
 	endpoint := NewEndpoint(req)
 
 	// empty id, slug and tracking_number
-	p := common.SingleTrackingParam{
+	p := tracking.SingleTrackingParam{
 		ID:             "",
 		Slug:           "",
 		TrackingNumber: "",
 		OptionalParams: nil,
 	}
 
-	_, err := endpoint.GetLastCheckpoint(p, nil)
+	_, err := endpoint.GetLastCheckpoint(context.Background(), p, nil)
 	assert.NotNil(t, err)
 	assert.Equal(t, "HandlerError", err.Type)
 
@@ -104,7 +106,7 @@ func TestError(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	p = common.SingleTrackingParam{
+	p = tracking.SingleTrackingParam{
 		Slug:           "xq-express",
 		TrackingNumber: "LS404494276CN",
 	}
@@ -118,7 +120,7 @@ func TestError(t *testing.T) {
 		LastCheckpoint{},
 	}, nil)
 
-	_, err = endpoint.GetLastCheckpoint(p, nil)
+	_, err = endpoint.GetLastCheckpoint(context.Background(), p, nil)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Unauthorized", err.Type)
 }

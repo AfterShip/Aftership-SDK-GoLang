@@ -1,6 +1,7 @@
 package tracking_test
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"time"
@@ -48,7 +49,7 @@ func ExampleEndpoint_CreateTracking() {
 		},
 	}
 
-	result, err := client.Tracking.CreateTracking(newTracking)
+	result, err := client.Tracking.CreateTracking(context.Background(), newTracking)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -68,12 +69,12 @@ func ExampleEndpoint_DeleteTracking() {
 	}
 
 	// Delete a tracking
-	param := common.SingleTrackingParam{
+	param := tracking.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1234567890",
 	}
 
-	result, err := client.Tracking.DeleteTracking(param)
+	result, err := client.Tracking.DeleteTracking(context.Background(), param)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -98,7 +99,7 @@ func ExampleEndpoint_GetTrackings() {
 		Limit: 10,
 	}
 
-	multiResults, err := client.Tracking.GetTrackings(multiParams)
+	multiResults, err := client.Tracking.GetTrackings(context.Background(), multiParams)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -118,12 +119,12 @@ func ExampleEndpoint_GetTracking() {
 	}
 
 	// Get tracking results of a single tracking.
-	param := common.SingleTrackingParam{
+	param := tracking.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
 
-	result, err := client.Tracking.GetTracking(param, nil)
+	result, err := client.Tracking.GetTracking(context.Background(), param, nil)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -131,11 +132,11 @@ func ExampleEndpoint_GetTracking() {
 	}
 
 	// Get tracking results of a single tracking by id.
-	param = common.SingleTrackingParam{
+	param = tracking.SingleTrackingParam{
 		ID: "rymq9l34ztbvvk9md2ync00r",
 	}
 
-	result, err = client.Tracking.GetTracking(param, &tracking.GetTrackingParams{
+	result, err = client.Tracking.GetTracking(context.Background(), param, &tracking.GetTrackingParams{
 		Fields: "tracking_postal_code,title,order_id",
 	})
 	if err != nil {
@@ -156,7 +157,7 @@ func ExampleEndpoint_UpdateTracking() {
 	}
 
 	// Update a tracking.
-	param := common.SingleTrackingParam{
+	param := tracking.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
@@ -167,7 +168,7 @@ func ExampleEndpoint_UpdateTracking() {
 		},
 	}
 
-	result, err := client.Tracking.UpdateTracking(param, updateReq)
+	result, err := client.Tracking.UpdateTracking(context.Background(), param, updateReq)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -187,12 +188,12 @@ func ExampleEndpoint_ReTrack() {
 	}
 
 	// Retrack an expired tracking.
-	param := common.SingleTrackingParam{
+	param := tracking.SingleTrackingParam{
 		Slug:           "dhl",
 		TrackingNumber: "1588226550",
 	}
 
-	result, err := client.Tracking.ReTrack(param)
+	result, err := client.Tracking.ReTrack(context.Background(), param)
 	if err != nil {
 		fmt.Println(err)
 	} else {
