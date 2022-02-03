@@ -19,6 +19,9 @@ type APIError struct {
 	Type    string `json:"type"`
 	Message string `json:"message"`
 	Path    string `json:"path"`
+
+	// HTTPStatusCode represents the original HTTP status code which was returned by request from Aftership's API
+	HTTPStatusCode int `json:"http_status_code"`
 }
 
 // Error serializes the error object to JSON and returns it as a string.

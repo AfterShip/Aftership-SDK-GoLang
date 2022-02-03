@@ -61,8 +61,8 @@ func (client *Client) makeRequest(ctx context.Context, method string, path strin
 	if err != nil {
 		return errors.Wrap(err, "HTTP request failed")
 	}
-
 	defer resp.Body.Close()
+
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return errors.Wrap(err, "could not read response body")
@@ -87,10 +87,11 @@ func (client *Client) makeRequest(ctx context.Context, method string, path strin
 	}
 
 	apiError := APIError{
-		Type:    result.Meta.Type,
-		Code:    result.Meta.Code,
-		Message: result.Meta.Message,
-		Path:    path,
+		Type:           result.Meta.Type,
+		Code:           result.Meta.Code,
+		Message:        result.Meta.Message,
+		Path:           path,
+		HTTPStatusCode: resp.StatusCode,
 	}
 
 	// Too many requests error

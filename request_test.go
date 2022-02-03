@@ -9,7 +9,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type mockData struct {
@@ -236,4 +238,25 @@ func TestBlockRequestWhenReachLimit(t *testing.T) {
 	err := client.makeRequest(context.Background(), http.MethodGet, "/test", nil, nil, &result)
 	assert.NotNil(t, err)
 	assert.Equal(t, exp, err.Error())
+}
+
+func TestFillingOriginalStatusCode(t *testing.T) {
+	setup()
+	defer teardown()
+
+	statusTeapot := http.StatusTeapot
+	mux.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodPut, r.Method)
+		w.WriteHeader(statusTeapot)
+		_, _ = w.Write([]byte(`{ "data": "test"}`))
+	})
+
+	var result string
+	err := client.makeRequest(context.Background(), http.MethodPut, "/test", nil, nil, &result)
+	require.Error(t, err)
+
+	var targetErr *APIError
+	require.True(t, errors.As(err, &targetErr))
+
+	require.Equal(t, statusTeapot, targetErr.HTTPStatusCode)
 }
