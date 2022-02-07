@@ -20,7 +20,7 @@ type APIError struct {
 	Message string `json:"message"`
 	Path    string `json:"path"`
 
-	// HTTPStatusCode represents the original HTTP status code which was returned by the request from the AfterShip's API
+	// HTTPStatusCode represents the original HTTP status code which was returned by the request from AfterShip's API
 	HTTPStatusCode int `json:"http_status_code"`
 }
 
