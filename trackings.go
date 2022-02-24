@@ -31,6 +31,8 @@ type CreateTrackingParams struct {
 	DestinationCountryISO3     string            `json:"destination_country_iso3,omitempty"`     // Enter ISO Alpha-3 (three letters) to specify the destination of the shipment (e.g. USA for United States). If you use postal service to send international shipments, AfterShip will automatically get tracking results at destination courier as well.
 	OrderID                    string            `json:"order_id,omitempty"`                     // Text field for order ID
 	OrderIDPath                string            `json:"order_id_path,omitempty"`                // Text field for order path
+	OrderNumber                string            `json:"order_number,omitempty"`                 // Text field for order number
+	OrderDate                  string            `json:"order_date,omitempty"`                   // Date and time of the order created
 	CustomFields               map[string]string `json:"custom_fields,omitempty"`                // Custom fields that accept a hash with string, boolean or number fields
 	Language                   string            `json:"language,omitempty"`                     // Enter ISO 639-1 Language Code to specify the store, customer or order language.
 	OrderPromisedDeliveryDate  string            `json:"order_promised_delivery_date,omitempty"` // Promised delivery date of an order inYYYY-MM-DD format.
@@ -94,6 +96,8 @@ type Tracking struct {
 	IOS                           []string              `json:"ios,omitempty"`                               // Apple iOS device IDs to receive the push notifications.
 	OrderID                       string                `json:"order_id,omitempty"`                          // Text field for order ID
 	OrderIDPath                   string                `json:"order_id_path,omitempty"`                     // Text field for order path
+	OrderNumber                   string                `json:"order_number,omitempty"`                      // Text field for order number
+	OrderDate                     string                `json:"order_date,omitempty"`                        // Date and time of the order created
 	OriginCountryISO3             string                `json:"origin_country_iso3,omitempty"`               // Origin country of the tracking. ISO Alpha-3 (three letters).
 	UniqueToken                   string                `json:"unique_token,omitempty"`                      // The token to generate the direct tracking link: https://yourusername.aftership.com/unique_token or https://www.aftership.com/unique_token
 	ShipmentPackageCount          int                   `json:"shipment_package_count,omitempty"`            // Number of packages under the tracking (if any).
@@ -177,6 +181,8 @@ type UpdateTrackingParams struct {
 	DestinationCountryISO3 string            `json:"destination_country_iso3,omitempty"`
 	OrderID                string            `json:"order_id,omitempty"`
 	OrderIDPath            string            `json:"order_id_path,omitempty"`
+	OrderNumber            string            `json:"order_number,omitempty"`
+	OrderDate              string            `json:"order_date,omitempty"`
 	CustomFields           map[string]string `json:"custom_fields,omitempty"`
 }
 
