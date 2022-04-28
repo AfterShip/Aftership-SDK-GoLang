@@ -182,18 +182,112 @@ type UpdateTrackingParams struct {
 
 // GetTrackingsParams represents the set of params for get Trackings API
 type GetTrackingsParams struct {
-	Page         int    `url:"page,omitempty" json:"page,omitempty"`                     // Page to show. (Default: 1)
-	Limit        int    `url:"limit,omitempty" json:"limit,omitempty"`                   // Number of trackings each page contain. (Default: 100, Max: 200)
-	Keyword      string `url:"keyword,omitempty" json:"keyword,omitempty"`               // Search the content of the tracking record fields:tracking_number, title, order_id, customer_name, custom_fields, order_id, emails, smses
-	Slug         string `url:"slug,omitempty" json:"slug,omitempty"`                     // Unique courier code Use comma for multiple values. (Example: dhl,ups,usps)
-	DeliveryTime int    `url:"delivery_time,omitempty" json:"delivery_time,omitempty"`   // Total delivery time in days.
-	Origin       string `url:"origin,omitempty" json:"origin,omitempty"`                 // Origin country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple values. (Example: USA,HKG)
-	Destination  string `url:"destination,omitempty" json:"destination,omitempty"`       // Destination country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple values. (Example: USA,HKG)
-	Tag          string `url:"tag,omitempty" json:"tag,omitempty"`                       // Current status of tracking. Values include Pending, InfoReceived, InTransit, OutForDelivery, AttemptFail, Delivered, Exception, Expired(See status definition)
-	CreatedAtMin string `url:"created_at_min,omitempty" json:"created_at_min,omitempty"` // Start date and time of trackings created. AfterShip only stores data of 90 days. (Defaults: 30 days ago, Example: 2013-03-15T16:41:56+08:00)"
-	CreatedAtMax string `url:"created_at_max,omitempty" json:"created_at_max,omitempty"` // End date and time of trackings created. (Defaults: now, Example: 2013-04-15T16:41:56+08:00)"
-	Fields       string `url:"fields,omitempty" json:"fields,omitempty"`                 // "List of fields to include in the http. Use comma for multiple values. Fields to include: title, order_id, tag, checkpoints, checkpoint_time, message, country_name. Defaults: none, Example: title,order_id"
-	Lang         string `url:"lang,omitempty" json:"lang,omitempty"`                     // "Default: '' / Example: 'en'. Support Chinese to English translation for china-ems and china-post only"
+	/**
+	 * Page to show. (Default: 1)
+	 */
+	Page int `url:"page,omitempty" json:"page,omitempty"`
+
+	/**
+	 * Number of trackings each page contain. (Default: 100, Max: 200)
+	 */
+	Limit int `url:"limit,omitempty" json:"limit,omitempty"`
+
+	/**
+	 * Search the content of the tracking record fields:
+	 * tracking_number,  title,  order_id,  customer_name,  custom_fields,  order_id,  emails,  smses
+	 */
+	Keyword string `url:"keyword,omitempty" json:"keyword,omitempty"`
+
+	/**
+	 * Tracking number of shipments. Use comma to separate multiple values
+	 * (Example: RA123456789US,LE123456789US)
+	 */
+	TrackingNumbers string `url:"tracking_numbers,omitempty" json:"tracking_numbers,omitempty"`
+
+	/**
+	 * Unique courier code Use comma for multiple values. (Example: dhl,ups,usps)
+	 */
+	Slug string `url:"slug,omitempty" json:"slug,omitempty"`
+
+	/**
+	 * Total delivery time in days.
+	 * - Difference of 1st checkpoint time and delivered time for delivered shipments
+	 * - Difference of 1st checkpoint time and current time for non-delivered shipments
+	 * Value as 0 for pending shipments or delivered shipment with only one checkpoint.
+	 */
+	DeliveryTime int `url:"delivery_time,omitempty" json:"delivery_time,omitempty"`
+
+	/**
+	 * Origin country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple values. (Example: USA,HKG)
+	 */
+	Origin string `url:"origin,omitempty" json:"origin,omitempty"`
+
+	/**
+	 * Destination country of trackings. Use ISO Alpha-3 (three letters).
+	 * Use comma for multiple values. (Example: USA,HKG)
+	 */
+	Destination string `url:"destination,omitempty" json:"destination,omitempty"`
+
+	/**
+	 * Current status of tracking.
+	 */
+	Tag string `url:"tag,omitempty" json:"tag,omitempty"`
+
+	/**
+	 * Start date and time of trackings created. AfterShip only stores data of 90 days.
+	 * (Defaults: 30 days ago, Example: 2013-03-15T16:41:56+08:00)
+	 */
+	CreatedAtMin string `url:"created_at_min,omitempty" json:"created_at_min,omitempty"`
+
+	/**
+	 * End date and time of trackings created.
+	 * (Defaults: now, Example: 2013-04-15T16:41:56+08:00)
+	 */
+	CreatedAtMax string `url:"created_at_max,omitempty" json:"created_at_max,omitempty"`
+
+	/**
+	 * Start date and time of trackings updated.
+	 * (Example: 2013-04-15T16:41:56+08:00)
+	 */
+	UpdatedAtMin string `url:"updated_at_min,omitempty" json:"updated_at_min,omitempty"`
+
+	/**
+	 * End date and time of trackings updated. (Example: 2013-04-15T16:41:56+08:00)
+	 */
+	UpdatedAtMax string `url:"updated_at_max,omitempty" json:"updated_at_max,omitempty"`
+
+	/**
+	 * List of fields to include in the response.
+	 * Use comma for multiple values. Fields to include: title,  order_id,  tag,
+	 * checkpoints,  checkpoint_time,  message,  country_name
+	 * Defaults: none, Example: title,order_id
+	 */
+	Fields string `url:"fields,omitempty" json:"fields,omitempty"`
+
+	/**
+	 * Default: '' / Example: 'en'
+	 * Support Chinese to English translation for  china-ems  and  china-post  only
+	 */
+	Lang string `url:"lang,omitempty" json:"lang,omitempty"`
+
+	/**
+	 * Tracking last updated at
+	 * (Example: 2013-03-15T16:41:56+08:00)
+	 */
+	LastUpdatedAt string `url:"last_updated_at,omitempty" json:"last_updated_at,omitempty"`
+
+	/**
+	 * Select return to sender, the value should be true or false,
+	 * with optional comma separated.
+	 */
+	ReturnToSender string `url:"return_to_sender,omitempty" json:"return_to_sender,omitempty"`
+
+	/**
+	 * Destination country of trackings returned by courier.
+	 * Use ISO Alpha-3 (three letters).
+	 * Use comma for multiple values. (Example: USA,HKG)
+	 */
+	CourierDestinationCountryIso3 string `url:"courier_destination_country_iso3,omitempty" json:"courier_destination_country_iso3,omitempty"`
 }
 
 // PagedTrackings is a model for data part of the multiple trackings API responses
