@@ -18,6 +18,8 @@ type GetCheckpointParams struct {
 
 	// Support Chinese to English translation for china-ems  and  china-post  only (Example: en)
 	Lang string `url:"lang,omitempty" json:"lang,omitempty"`
+
+	AdditionalField
 }
 
 // LastCheckpoint is the last checkpoint API response
