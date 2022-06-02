@@ -39,26 +39,14 @@ type CourierDetectionParams struct {
 	// TrackingNumber of a shipment. Mandatory field.
 	TrackingNumber string `json:"tracking_number"`
 
-	// TrackingPostalCode is the postal code of receiver's address.
-	// Required by some couriers, such as postnl
-	TrackingPostalCode string `json:"tracking_postal_code,omitempty"`
-
-	// TrackingShipDate in YYYYMMDD format. Required by some couriers, such as deutsch-post
-	TrackingShipDate string `json:"tracking_ship_date,omitempty"`
-
-	// TrackingAccountNumber of the shipper for a specific courier. Required by some couriers, such as dynamic-logistics
-	TrackingAccountNumber string `json:"tracking_account_number,omitempty"`
-
-	// TrackingKey of the shipment for a specific courier. Required by some couriers, such as sic-teliway
-	TrackingKey string `json:"tracking_key,omitempty"`
-
-	// TrackingDestinationCountry of the shipment for a specific courier. Required by some couriers, such as postnl-3s
-	TrackingDestinationCountry string `json:"tracking_destination_country,omitempty"`
-
 	// Slug If not specified, AfterShip will automatically detect the courier based on the tracking number format and
 	// your selected couriers.
 	// Use array to input a list of couriers for auto detect.
 	Slug []string `json:"slug,omitempty"`
+
+	AdditionalField
+
+	SlugGroup string `json:"slug_group,omitempty"`
 }
 
 // GetCouriers returns a list of couriers activated at your AfterShip account.
