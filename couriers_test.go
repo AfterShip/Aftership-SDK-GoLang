@@ -204,7 +204,7 @@ func TestDetectCouriers(t *testing.T) {
 	}`))
 	})
 
-	exp := TrackingCouriers{
+	exp := CourierList{
 		Total: 2,
 		Couriers: []Courier{
 			{

@@ -26,13 +26,6 @@ type CourierList struct {
 	Couriers []Courier `json:"couriers"` // Array of Courier describes the couriers information.
 }
 
-// TrackingCouriers is the model describing an AfterShip couriers detect list
-type TrackingCouriers struct {
-	Total    int       `json:"total"`    // Total number of matched couriers
-	Tracking Tracking  `json:"tracking"` // Tracking describes the tracking information.
-	Couriers []Courier `json:"couriers"` // A list of matched couriers based on tracking number format.
-}
-
 // CourierDetectionParams contains fields required and optional fields for courier detection
 type CourierDetectionParams struct {
 
@@ -70,15 +63,15 @@ type detectCourierRequest struct {
 
 // DetectCouriers returns a list of matched couriers based on tracking number format
 // and selected couriers or a list of couriers.
-func (client *Client) DetectCouriers(ctx context.Context, params CourierDetectionParams) (TrackingCouriers, error) {
+func (client *Client) DetectCouriers(ctx context.Context, params CourierDetectionParams) (CourierList, error) {
 	if params.TrackingNumber == "" {
-		return TrackingCouriers{}, errors.New(errMissingTrackingNumber)
+		return CourierList{}, errors.New(errMissingTrackingNumber)
 	}
 
-	var trackingCouriers TrackingCouriers
+	var courierList CourierList
 	err := client.makeRequest(ctx, http.MethodPost, "/couriers/detect", nil,
 		&detectCourierRequest{
 			Tracking: params,
-		}, &trackingCouriers)
-	return trackingCouriers, err
+		}, &courierList)
+	return courierList, err
 }
