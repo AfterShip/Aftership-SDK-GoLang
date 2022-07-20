@@ -124,6 +124,11 @@ type CreateTrackingParams struct {
 	 * Text field for order number
 	 */
 	OrderNumber string `json:"order_number,omitempty"`
+
+	/**
+	 * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.
+	 */
+	ShipmentType string `json:"shipment_type,omitempty"`
 }
 
 // TrackingIdentifier is an identifier for a single tracking
@@ -571,8 +576,9 @@ type UpdateTrackingParams struct {
 	PickupNote                string            `json:"pickup_note,omitempty"`
 	Slug                      string            `json:"slug,omitempty"`
 	AdditionalField
-	OrderNumber string `json:"order_number,omitempty"`
-	OrderDate   string `json:"order_date,omitempty"`
+	OrderNumber  string `json:"order_number,omitempty"`
+	OrderDate    string `json:"order_date,omitempty"`
+	ShipmentType string `json:"shipment_type,omitempty"`
 }
 
 // GetTrackingsParams represents the set of params for get Trackings API
