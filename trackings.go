@@ -499,10 +499,10 @@ type Tracking struct {
 	 */
 	NextCouriers []NextCourier `json:"next_couriers"`
 
-	Poof []PoofOfDelivery `json:"proof_of_delivery"`
+	Proof []ProofOfDelivery `json:"proof_of_delivery"`
 }
 
-type PoofOfDelivery struct {
+type ProofOfDelivery struct {
 	Type string `json:"type"`
 	Url  string `json:"url"`
 }
