@@ -498,6 +498,13 @@ type Tracking struct {
 	 * If a shipment has multiple carriers, you can use the next_couriers field to tell AfterShip who the second carrier is.
 	 */
 	NextCouriers []NextCourier `json:"next_couriers"`
+
+	Poof []PoofOfDelivery `json:"proof_of_delivery"`
+}
+
+type PoofOfDelivery struct {
+	Type string `json:"type"`
+	Url  string `json:"url"`
 }
 
 type NextCourier struct {
