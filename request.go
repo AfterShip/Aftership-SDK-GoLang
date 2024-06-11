@@ -20,14 +20,6 @@ import (
 func (client *Client) makeRequest(ctx context.Context, method string, path string,
 	queryParams interface{}, inputData interface{}, resultData interface{}) error {
 
-	// Check if rate limit is exceeded
-	if client.rateLimit != nil && client.rateLimit.isExceeded() {
-		return &APIError{
-			Code:    codeRateLimiting,
-			Message: errExceedRateLimit,
-		}
-	}
-
 	// Read input data
 	var body io.Reader
 	var bodyStr string
