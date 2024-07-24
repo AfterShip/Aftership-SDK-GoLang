@@ -1,3 +1,8 @@
+# Deprecation notice: New Version Available
+
+This version of the SDK has been deprecated and replaced with the newly reconstructed SDK.
+
+For the latest API features and improved integration, please visit our updated repository at https://github.com/AfterShip/tracking-sdk-go and follow the provided instructions.
 
 # aftership-sdk-go
 
